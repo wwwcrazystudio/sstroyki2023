@@ -1,0 +1,35 @@
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import 'sass-rem/rem';
+@import 'variables';
+@import 'buttons';
+@import 'placeholders';
+
+@mixin unlist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+@mixin scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #F8F8F8 var(--accent);
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--accent);
+        border-radius: 50px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+        background-color: #F8F8F8;
+        border-radius: 50px;
+    }
+}

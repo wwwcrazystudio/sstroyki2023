@@ -1,0 +1,110 @@
+%slider-pagination {
+    display: flex;
+    gap: rem(15px);
+    z-index: 10;
+
+    @include media-breakpoint-down(md) {
+        gap: rem(6px);
+    }
+
+    &:deep(.swiper-pagination-bullet) {
+        width: rem(6px);
+        height: rem(6px);
+        background-color: #000;
+        opacity: 0.25;
+        transition: 350ms;
+        border-radius: 3px;
+
+        @include media-breakpoint-down(md) {
+            width: rem(4px);
+            height: rem(4px);
+        }
+    }
+
+    &:deep(.swiper-pagination-bullet-active) {
+        opacity: 1;
+        width: rem(26px);
+        transition: 350ms;
+
+        @include media-breakpoint-down(md) {
+            width: rem(16px);
+        }
+    }
+}
+
+%slider-controls {
+    background-color: #fff;
+    padding: rem(15px);
+    box-shadow: 0px 20px 30px -10px rgba(40, 41, 50, 0.15);
+    border-radius: rem(20px);
+    border-top-right-radius: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+
+    @include media-breakpoint-down(md) {
+        padding: rem(10px);
+        border-radius: 0px 14px 14px 14px;
+    }
+}
+
+%slider-control {
+    width: rem(40px);
+    height: rem(40px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include media-breakpoint-down(md) {
+        width: 30px;
+        height: 30px;
+    }
+
+    svg path {
+        transition: 500ms;
+    }
+
+    &:hover {
+        svg path {
+            fill: $accent;
+            transition: 500ms;
+        }
+    }
+
+    &:first-of-type {
+        padding-right: rem(15px);
+        border-right: 1px solid $gray;
+    }
+
+    &:last-of-type {
+        padding-left: rem(15px);
+    }
+}
+
+%h1 {
+    font-size: rem(48px);
+    font-weight: 600;
+    line-height: 110%;
+
+    @include media-breakpoint-down(lg) {
+        font-size: rem(32px);
+    }
+}
+
+%h2 {
+    font-weight: 600;
+    font-size: rem(32px);
+
+    @include media-breakpoint-down(md) {
+        font-size: rem(24px);
+    }
+}
+
+%h3 {
+    font-weight: 600;
+    font-size: rem(24px);
+
+    @include media-breakpoint-down(md) {
+        font-size: rem(20px);
+    }
+}
