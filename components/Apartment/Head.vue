@@ -194,6 +194,10 @@ const handleGalleryNext = () => {
 
   mainGalleryIndex.value += 1;
 };
+
+onUnmounted(() => {
+  fancybox.value?.destroy()
+})
 </script>
 
 <style lang="scss" scoped>
