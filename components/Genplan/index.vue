@@ -4,15 +4,67 @@
       <div class="genplan__heading">Генплан проекта</div>
 
       <div class="genplan__img">
-        <img src="@/assets/img/placeholder/plan.jpg" alt="" />
+        <img :src="complex.scheme" alt="" />
 
-        <GenplanPopup class="genplan__genplan-popup" />
+        <div
+          class="genplan__item"
+          :class="item.label === activeItem?.label && 'genplan__item--active'"
+          v-for="item in complex.scheme_list"
+          :style="{ top: `${item.y}%`, left: `${item.x}%` }"
+          @click.stop="(e) => handleSetActiveItem(e, item)"
+        ></div>
+
+        <div ref="popup" :style="floatingStyles">
+          <GenplanPopup
+            class="genplan__genplan-popup"
+            :item="activeItem"
+            v-if="activeItem"
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import type { ComplexData, SchemeItem } from '~/types/interfaces';
+import { useFloating, offset, flip, shift } from '@floating-ui/vue';
+
+interface Props {
+  complex: ComplexData;
+}
+
+defineProps<Props>();
+
+const activeItem = ref<SchemeItem>();
+
+const reference = ref<HTMLElement>();
+const popup = ref<HTMLElement>();
+
+const { floatingStyles } = useFloating(reference, popup, {
+  placement: 'right',
+  middleware: [offset(10), flip(), shift()],
+});
+
+const handleDocumentClick = (e: MouseEvent) => {
+  if (popup.value?.contains(e.target as HTMLElement)) return;
+
+  activeItem.value = undefined;
+};
+
+const handleSetActiveItem = (e: MouseEvent, item: SchemeItem) => {
+  activeItem.value = item;
+  reference.value = e.target as HTMLElement;
+};
+
+onMounted(() => {
+  document.addEventListener('click', handleDocumentClick);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleDocumentClick);
+});
+</script>
 
 <style lang="scss" scoped>
 .genplan {
@@ -35,7 +87,7 @@
 
   &__heading {
     @extend %h2;
-    
+
     margin-bottom: rem(32px);
 
     @include media-breakpoint-down(md) {
@@ -56,18 +108,34 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
+      border-radius: rem(16px);
     }
   }
 
   &__genplan-popup {
-    position: absolute;
-    right: 10%;
-    top: 20%;
     width: 100%;
     max-width: rem(352px);
+  }
 
-    @include media-breakpoint-down(md) {
-      display: none;
+  &__item {
+    width: rem(10px);
+    height: rem(10px);
+    position: absolute;
+    border: 2px solid #fff;
+    background-color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 500ms;
+    z-index: 100;
+
+    &--active {
+      background-color: var(--accent);
+      transition: 500ms;
+    }
+
+    &:hover {
+      transform: scale(2);
+      transition: 500ms;
     }
   }
 }

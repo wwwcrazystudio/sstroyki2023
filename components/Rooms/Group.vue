@@ -2,7 +2,7 @@
   <li class="rooms-group">
     <button class="rooms-group__toggler" :class="expanded && 'rooms-group__toggler--expanded'" @click="expanded = !expanded">
       <span>
-        <span class="rooms-group__name"> {{ type }} от {{rooms.square_min}} м2 </span>
+        <span class="rooms-group__name"> {{ roomType }} от {{rooms.square_min}} м2 </span>
         <span class="rooms-group__price-range"> от {{ formatNumber(parseInt(rooms.price_min)) }} до {{ formatNumber(parseInt(rooms.price_max)) }} ₽ </span>
       </span>
 
@@ -34,7 +34,7 @@
         <RoomsItem :room="room" v-for="room in rooms.array.slice(0, 5)" />
       </ul>
 
-      <button class="rooms-group__link" v-if="rooms.array.length > 5">
+      <NuxtLink :to="groupRoute" class="rooms-group__link" v-if="rooms.array.length > 5">
         Смотреть все предложения
 
         <svg
@@ -51,7 +51,7 @@
             stroke-linecap="round"
           />
         </svg>
-      </button>
+      </NuxtLink>
     </template>
   </li>
 </template>
@@ -60,13 +60,14 @@
 import type { ComplexRoomsData } from '~/types/interfaces';
 
 interface Props {
-  type: string;
+  type: number;
   rooms: ComplexRoomsData;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 const expanded = ref<boolean>(false);
+const route = useRoute()
 
 const formatNumber = (number: number) => {
   if (number >= 1000 && number <= 1000000) {
@@ -79,6 +80,40 @@ const formatNumber = (number: number) => {
 
   return number;
 };
+
+
+const roomType = computed(() => {
+  switch (props.type) {
+    case 0:
+      return 'Студия';
+      case 1:
+      return '1-комн.';
+      case 2:
+      return '2-комн.';
+      case 3:
+      return '3-комн.';
+      case 4:
+      return '4-комн.';
+      default:
+      return '---';
+  }
+})
+
+const groupRoute = computed(() => {
+  const houseSlug = route.params.slug
+  switch (props.type) {
+    case 0:
+    return `/novostroyki/${houseSlug}/studii`
+    case 1:
+    return `/novostroyki/${houseSlug}/1k-kvartiry`
+    case 2:
+    return `/novostroyki/${houseSlug}/2k-kvartiry`
+    case 3:
+    return `/novostroyki/${houseSlug}/3k-kvartiry`
+    case 4:
+    return `/novostroyki/${houseSlug}/4k-kvartiry`
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -168,6 +203,8 @@ const formatNumber = (number: number) => {
 
   &__link {
     margin-top: rem(24px);
+    display: block;
+    text-decoration: none;
     font-weight: 500;
     color: var(--accent);
   }

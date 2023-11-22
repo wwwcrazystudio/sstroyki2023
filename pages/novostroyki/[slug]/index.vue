@@ -11,7 +11,7 @@
             :date-updated="data.complex.price_date_update"
           />
 
-          <Genplan class="apartment-page__genplan" />
+          <Genplan :complex="data.complex" class="apartment-page__genplan" />
 
           <CreditCalc
             v-if="data.complex.rooms"
@@ -32,7 +32,6 @@
             :complex="data.complex"
             :developer="data.developer"
           />
-          <ApartmentDocuments :documents="data.complex.documents" />
           <ApartmentRelatedApartments
             title="Другие ЖК от застройщика"
             :houses="
@@ -40,6 +39,13 @@
                 (el) => el.developer_id
               )
             "
+          />
+
+          <ApartmentDocuments :documents="data.complex.documents" />
+
+          <ApartmentRelatedApartments
+            title="ЖК в том же ценовом диапазоне"
+            :houses="data.complex.recommended"
           />
         </div>
 
@@ -99,6 +105,10 @@ console.log(data.value);
     grid-template-columns: auto rem(374px);
     gap: rem(56px);
     margin: rem(56px 0);
+
+    @include media-breakpoint-down(xxl) {
+      gap: rem(32px);
+    }
 
     @include media-breakpoint-down(lg) {
       grid-template-columns: 1fr;

@@ -17,7 +17,7 @@
               </div>
             </div>
             <div class="apartment-head__info-foot">
-              <button class="apartment-head__btn">Смотреть фото</button>
+              <button class="apartment-head__btn" @click="toggleFullscreen">Смотреть фото</button>
               <div class="apartment-head__controls">
                 <button
                   class="apartment-head__control"
@@ -85,7 +85,17 @@
         </div>
       </div>
       <div class="apartment-head__photos" v-if="mainGallery">
-        <img :src="mainGallery[mainGalleryIndex]" alt="" />
+        <picture>
+            <source
+              v-if="mainGallery[mainGalleryIndex]?.mobile"
+              :srcset="mainGallery[mainGalleryIndex].mobile"
+              media="(max-width: 768px)"
+            />
+            <img
+              :src="mainGallery[mainGalleryIndex]?.desktop"
+              alt=""
+            />
+          </picture>
       </div>
     </div>
   </div>
@@ -99,6 +109,9 @@ import type {
   Tag,
 } from '~/types/interfaces';
 
+import { Fancybox } from '@fancyapps/ui';
+import '@fancyapps/ui/dist/fancybox/fancybox.css';
+
 interface Props {
   complex: ComplexData;
   developer: DeveloperData;
@@ -107,11 +120,10 @@ interface Props {
 const props = defineProps<Props>();
 
 const mainGalleryIndex = ref<number>(0);
+const fancybox = ref<Fancybox>();
 
 const mainGallery = computed(() => {
-  return props.complex.image_main?.desktop?.map(
-    (el) => `${props.complex.image_main.path}/desktop/${el}`
-  ) || [];
+  return useResponsiveImage(props.complex.image_main).value
 });
 
 const routes = computed<Route[]>(() => {
@@ -150,6 +162,20 @@ const tags = computed<Tag[]>(() => {
 
   return list;
 });
+
+const toggleFullscreen = () => {
+  fancybox.value = new Fancybox(
+    mainGallery.value.map((el) => {
+      return {
+        src: el.desktop,
+        thumb: el.desktop,
+      };
+    }),
+    {
+      startIndex: mainGalleryIndex.value,
+    }
+  );
+};
 
 const handleGalleryPrev = () => {
   if (mainGalleryIndex.value === 0) {

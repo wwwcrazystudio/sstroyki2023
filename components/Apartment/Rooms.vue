@@ -11,7 +11,7 @@
 
       <ul class="apartment-rooms__list">
         <template v-for="group, index in rooms">
-          <RoomsGroup :type="getRoomType(index)" :rooms="group" v-if="group.array.length" />
+          <RoomsGroup :type="index" :rooms="group" v-if="group.array.length" />
         </template>
       </ul>
     </div>
@@ -37,23 +37,6 @@ const totalRooms = computed(() => {
 const formattedDate = computed(() => {
   return DateTime.fromSQL(props.dateUpdated).toFormat('dd.MM.yyyy');
 });
-
-const getRoomType = (index: number) => {
-  switch (index) {
-    case 0:
-      return 'Студия';
-      case 1:
-      return '1-комн.';
-      case 2:
-      return '2-комн.';
-      case 3:
-      return '3-комн.';
-      case 4:
-      return '4-комн.';
-      default:
-      return '---';
-  }
-}
 </script>
 
 <style lang="scss" scoped>

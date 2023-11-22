@@ -71,6 +71,14 @@ export interface ComplexMetroData {
   time: string
 }
 
+export interface SchemeItem {
+  label: string,
+  rooms: ComplexRoomsData[]
+  status: string
+  x: string
+  y: string
+}
+
 export interface ComplexData {
   house_id: string;
   actual: string;
@@ -146,6 +154,9 @@ export interface ComplexData {
   finish_description: string
   finish_images: ResponsiveImagesList
   price_date_update: string
+  recommended: ComplexData[]
+  scheme: string
+  scheme_list: SchemeItem[]
 }
 
 export interface Route {
@@ -171,4 +182,10 @@ export interface DeveloperData {
   meta_description: string
   meta_keywords: string
   houses: ComplexData[]
+}
+
+export interface DocumentItemType { 
+  ext: string
+  size: number
+  path: string
 }

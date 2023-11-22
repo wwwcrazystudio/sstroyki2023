@@ -16,6 +16,7 @@
             :min="parseInt(complex.rooms[roomType].price_min)"
             :max="parseInt(complex.rooms[roomType].price_max)"
             postfix="₽"
+            :disabled="Boolean(room)"
           />
           <CreditCalcGroup
             title="Первоначальный взнос"
@@ -45,20 +46,20 @@
             postfix="%"
           />
 
-          <div class="credit-calc__total">
-            Ежемесячный платеж
-
-            <span>{{ total.toLocaleString() }} ₽</span>
-          </div>
-
-          <div class="credit-calc__notice">
-            Расчет условий не является публичной офертой. <br />
-            Финальные условия кредитования определяются при заключении договора.
-          </div>
+          <template v-if="!room">
+            <div class="credit-calc__total">
+              Ежемесячный платеж
+              <span>{{ total.toLocaleString() }} ₽</span>
+            </div>
+            <div class="credit-calc__notice">
+              Расчет условий не является публичной офертой. <br />
+              Финальные условия кредитования определяются при заключении договора.
+            </div>
+          </template>
         </div>
 
         <div class="credit-calc__col">
-          <div class="credit-calc__types">
+          <div class="credit-calc__types" v-if="!room">
             <template v-for="(group, index) in complex.rooms">
               <FormRadioLabel
                 v-if="group.array.length"
@@ -74,10 +75,22 @@
           <CreditCalcRoomPreview v-if="selectedRoom" :room="selectedRoom" />
 
           <CreditCalcRooms
+            v-if="!room"
             :rooms="complex.rooms[roomType].array"
             :selectedRoomId="selectedRoom?.uuid"
             @select="selectedRoom = $event"
           />
+
+          <template v-if="room">
+            <div class="credit-calc__total">
+              Ежемесячный платеж
+              <span>{{ total.toLocaleString() }} ₽</span>
+            </div>
+            <div class="credit-calc__notice">
+              Расчет условий не является публичной офертой. <br />
+              Финальные условия кредитования определяются при заключении договора.
+            </div>
+          </template>
         </div>
       </div>
     </div>
@@ -89,6 +102,7 @@ import type { ComplexData, ComplexSingleRoom } from '~/types/interfaces';
 
 interface Props {
   complex: ComplexData;
+  room?: ComplexSingleRoom
 }
 
 const props = defineProps<Props>();
@@ -97,6 +111,10 @@ const roomType = ref<number>(0);
 const selectedRoom = ref<ComplexSingleRoom | undefined>(
   props.complex?.rooms ? props.complex.rooms[0].array[0] : undefined
 );
+
+if (props.room) {
+  selectedRoom.value = props.room
+}
 
 const calcData = reactive({
   price: parseInt(props.complex.rooms[0].array[0].price) || 568000,

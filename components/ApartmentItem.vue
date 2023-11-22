@@ -28,7 +28,7 @@ const props = defineProps<Props>();
 
 const gallery = computed(() => {
   if (!props.complex.image_main) return
-  return useResponsiveImage(props.complex.image_main).value
+  return useResponsiveImage(props.complex.image_other).value
 });
 
 const totalRooms = computed(() => {

@@ -41,13 +41,13 @@
       </div>
 
       <div class="documents-item__info">
-        <div class="documents-item__title">Проектная декларация</div>
+        <div class="documents-item__title">{{ name }}</div>
         <div class="documents-item__meta">
-          <span>28.08.2023</span> <span>466 кб.</span>
+         <span>{{(item.size / 1000000).toFixed(1)}} MB</span>
         </div>
       </div>
 
-      <a href="" class="documents-item__btn">
+      <a :href="item.path" target="_blank" class="documents-item__btn">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M10 0V10.865L14.3598 7.23178L15.6402 8.76822L9 14.3017L2.35982 8.76822L3.64018 7.23178L8 10.865V0H10ZM1 18V16H17V18H1Z" fill="#347DE7"/>
         </svg>
@@ -57,11 +57,18 @@
 </template>
 
 <script lang="ts" setup>
+import type { DocumentItemType } from '~/types/interfaces';
+
 interface Props {
-  item: string
+  item: DocumentItemType
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+const name = computed(() => {
+  const nameArr = props.item.path.split('/')
+  return nameArr[nameArr.length - 1]
+})
 </script>
 
 <style lang="scss" scoped>

@@ -4,8 +4,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: process.env.API_URL,
-      domain: process.env.DOMAIN
+      domain: process.env.DOMAIN,
+      ymapapi: process.env.YMAP_KEY,
     }
+  },
+  devServer: {
+    port: 3000,
   },
   vite: {
     css: {

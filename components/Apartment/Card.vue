@@ -46,7 +46,7 @@
       </div>
 
       <div class="apartment-card__col" v-if="gallery.length">
-        <Gallery class="apartment-card__gallery" :images="gallery" />
+        <Gallery has-fullscreen class="apartment-card__gallery" :images="gallery" />
       </div>
     </div>
   </div>

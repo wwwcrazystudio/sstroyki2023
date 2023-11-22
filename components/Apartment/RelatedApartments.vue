@@ -64,7 +64,9 @@
         </ul>
       </div>
 
-      <NuxtLink to="/" class="related-apartments__btn">Посмотреть все проекты</NuxtLink>
+      <NuxtLink to="/" class="related-apartments__btn"
+        >Посмотреть все проекты</NuxtLink
+      >
     </div>
   </div>
 </template>
@@ -73,7 +75,7 @@
 import Swiper from 'swiper';
 import { Navigation } from 'swiper/modules';
 
-import 'swiper/scss'
+import 'swiper/scss';
 import type { ComplexData } from '~/types/interfaces';
 
 interface Props {
@@ -83,37 +85,39 @@ interface Props {
 
 defineProps<Props>();
 
-const swiper = ref<Swiper>()
-const carousel = ref<HTMLElement>()
-const prevBtn = ref<HTMLElement>()
-const nextBtn = ref<HTMLElement>()
+const swiper = ref<Swiper>();
+const carousel = ref<HTMLElement>();
+const prevBtn = ref<HTMLElement>();
+const nextBtn = ref<HTMLElement>();
 
-onMounted(() => {
-    if (!carousel.value) return
+onMounted(async () => {
+  if (!carousel.value) return;
 
-    swiper.value = new Swiper(carousel.value, {
-        slidesPerView: 1.15,
-        spaceBetween: 24,
-        modules: [Navigation],
-        loop: true,
-        navigation: {
-            prevEl: prevBtn.value,
-            nextEl: nextBtn.value
-        },
+  await nextTick()
+
+  swiper.value = new Swiper(carousel.value, {
+    slidesPerView: 1.15,
+    spaceBetween: 24,
+    modules: [Navigation],
+    loop: true,
+    navigation: {
+      prevEl: prevBtn.value,
+      nextEl: nextBtn.value,
+    },
     breakpoints: {
-        1200: {
-            slidesPerView: 3,
-        },
-        768: {
-            slidesPerView: 2,
-        }
-    }
-    })
-})
+      1200: {
+        slidesPerView: 3,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+    },
+  });
+});
 
 onUnmounted(() => {
-    swiper.value?.destroy()
-})
+  swiper.value?.destroy();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -135,13 +139,13 @@ onUnmounted(() => {
     margin-bottom: rem(36px);
 
     @include media-breakpoint-down(md) {
-        margin-bottom: rem(16px);
+      margin-bottom: rem(16px);
     }
   }
 
   &__heading {
     @extend %h2;
-    
+
     margin-bottom: 0;
   }
 
@@ -172,7 +176,6 @@ onUnmounted(() => {
 
   &__carousel-wrap {
     @include unlist();
-
   }
 
   &__btn {
@@ -180,6 +183,10 @@ onUnmounted(() => {
 
     width: 100%;
     margin-top: rem(32px);
+  }
+
+  .swiper-button-lock {
+    display: none;
   }
 }
 </style>

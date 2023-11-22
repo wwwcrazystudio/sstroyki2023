@@ -11,8 +11,10 @@
 </template>
 
 <script setup lang="ts">
+import type { DocumentItemType } from '~/types/interfaces';
+
 interface Props {
-    documents: string[];
+    documents: DocumentItemType[];
 }
 
 defineProps<Props>()

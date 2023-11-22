@@ -4,6 +4,8 @@
             <h2 class="apartment-location__heading">
                 Расположение и инфраструктура
             </h2>
+
+            <Map :complex="complex" class="apartment-location__map" />
             
             <ApartmentAddress :complex="complex" class="apartment-location__apartment-address" />
         </div>
@@ -38,6 +40,10 @@ defineProps<Props>()
     @include media-breakpoint-down(md) {
       margin-bottom: rem(16px);
     }
+  }
+
+  &__map {
+    margin-bottom: rem(24px);
   }
 
 }

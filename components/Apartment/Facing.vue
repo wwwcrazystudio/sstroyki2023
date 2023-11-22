@@ -3,7 +3,7 @@
     <div class="apartment-facing__wrap">
       <div class="apartment-facing__heading">Отделка квартир</div>
 
-      <Gallery :images="gallery" class="apartment-facing__gallery" />
+      <Gallery :images="gallery" has-fullscreen class="apartment-facing__gallery" />
 
       <div class="apartment-facing__desc-title">
         {{ complex.finish_title }}

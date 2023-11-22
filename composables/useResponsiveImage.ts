@@ -12,7 +12,7 @@ export const useResponsiveImage = (imgs: ResponsiveImagesList) => {
             const mobImage = imgs.mob?.find((mobEl) => el === mobEl);
             return {
                 desktop: `${imgs.path}/desktop/${el}`,
-                mobile: mobImage && `${imgs.path}/desktop/${mobImage}`,
+                mobile: mobImage && `${imgs.path}/mob/${mobImage}`,
             };
         });
     }

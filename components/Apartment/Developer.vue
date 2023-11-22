@@ -3,11 +3,16 @@
     <div class="apartment-developer__wrap">
       <div class="apartment-developer__heading">Информация о застройщике</div>
 
-      <DeveloperInfo :developer="developer" class="apartment-developer__developer-info" />
+      <DeveloperInfo
+        :developer="developer"
+        class="apartment-developer__developer-info"
+      />
 
       <ul class="apartment-developer__meta">
         <li class="apartment-developer__meta-item">
-          <div class="apartment-developer__meta-value">{{developer.houses_processing}}</div>
+          <div class="apartment-developer__meta-value">
+            {{ developer.houses_processing }}
+          </div>
           <div class="apartment-developer__meta-desc">
             дома строится
             <div>в {{ developer.total_processing }} ЖК</div>
@@ -15,7 +20,9 @@
         </li>
 
         <li class="apartment-developer__meta-item">
-          <div class="apartment-developer__meta-value">{{ developer.houses_complete }}</div>
+          <div class="apartment-developer__meta-value">
+            {{ developer.houses_complete }}
+          </div>
           <div class="apartment-developer__meta-desc">
             домов сдано в
             <div>{{ developer.total_complete }} ЖК</div>
@@ -23,7 +30,9 @@
         </li>
 
         <li class="apartment-developer__meta-item">
-          <div class="apartment-developer__meta-value">{{ developer.percent }}%</div>
+          <div class="apartment-developer__meta-value">
+            {{ developer.percent }}%
+          </div>
           <div class="apartment-developer__meta-desc">
             домов сдано
             <div>вовремя</div>
@@ -31,8 +40,10 @@
         </li>
       </ul>
 
-      <div class="apartment-developer__description" v-html="developer.description">
-      </div>
+      <div
+        class="apartment-developer__description"
+        v-html="developer.description"
+      ></div>
 
       <NuxtLink to="/" class="apartment-developer__link">
         Подробнее
@@ -43,12 +54,12 @@
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-            <path
-              d="M11 3.57874L6.07874 8.5L1.15748 3.57874"
-              stroke="#347DE7"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
+          <path
+            d="M11 3.57874L6.07874 8.5L1.15748 3.57874"
+            stroke="#347DE7"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
         </svg>
       </NuxtLink>
     </div>
@@ -59,11 +70,11 @@
 import type { ComplexData, DeveloperData } from '~/types/interfaces';
 
 interface Props {
-  developer: DeveloperData
-  complex: ComplexData
+  developer: DeveloperData;
+  complex: ComplexData;
 }
 
-defineProps<Props>()
+defineProps<Props>();
 </script>
 
 <style lang="scss" scoped>
@@ -80,7 +91,7 @@ defineProps<Props>()
 
   &__heading {
     @extend %h2;
-    
+
     margin-bottom: rem(32px);
 
     @include media-breakpoint-down(md) {
@@ -98,12 +109,12 @@ defineProps<Props>()
 
   &__meta {
     @include unlist();
-    
+
     display: grid;
     grid-template-columns: 1.4fr 1.4fr 1.4fr 1fr;
     gap: rem(32px);
 
-    @include media-breakpoint-down(lg) {
+    @include media-breakpoint-down(xxl) {
       grid-template-columns: 1fr 1fr 1fr;
       gap: rem(16px);
     }
@@ -114,10 +125,9 @@ defineProps<Props>()
       gap: rem(12px);
 
       @include media-breakpoint-down(md) {
-      flex-direction: column;
-      text-align: center;
-    }
-
+        flex-direction: column;
+        text-align: center;
+      }
     }
 
     &-value {
@@ -126,8 +136,8 @@ defineProps<Props>()
       font-weight: 600;
 
       @include media-breakpoint-down(md) {
-      font-size: rem(24px);
-    }
+        font-size: rem(24px);
+      }
     }
   }
 
@@ -144,7 +154,5 @@ defineProps<Props>()
     gap: 8px;
     align-items: center;
   }
-
-
 }
 </style>

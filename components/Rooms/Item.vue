@@ -22,7 +22,7 @@
         </div>
       </div>
 
-      <NuxtLink to="/" class="rooms-item__link"> Посмотреть квартиру </NuxtLink>
+      <NuxtLink :to="groupRoute" class="rooms-item__link"> Посмотреть квартиру </NuxtLink>
     </div>
   </li>
 </template>
@@ -31,7 +31,7 @@
 import { DateTime } from 'luxon';
 import type { ComplexSingleRoom } from '~/types/interfaces';
 
-const domain = useRuntimeConfig().public.domain
+const route = useRoute()
 
 interface Props {
   room: ComplexSingleRoom
@@ -45,6 +45,21 @@ const formattedDeadline = computed(() => {
   return `${quarter} квартал ${year} г.`
 })
 
+const groupRoute = computed(() => {
+  const houseSlug = route.params.slug
+  switch (props.room.rooms) {
+    case '0':
+    return `/novostroyki/${houseSlug}/studii/${props.room.room_id}`
+    case '1':
+    return `/novostroyki/${houseSlug}/1k-kvartiry/${props.room.room_id}`
+    case '2':
+    return `/novostroyki/${houseSlug}/2k-kvartiry/${props.room.room_id}`
+    case '3':
+    return `/novostroyki/${houseSlug}/3k-kvartiry/${props.room.room_id}`
+    case '4':
+    return `/novostroyki/${houseSlug}/4k-kvartiry/${props.room.room_id}`
+  }
+})
 </script>
 
 <style lang="scss" scoped>

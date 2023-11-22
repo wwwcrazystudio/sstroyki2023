@@ -33,22 +33,6 @@ const { data } = await useFetch<PageData>(
   `/api/novostroyki/${route.params.slug}`
 );
 
-const routes = computed<Route[]>(() => {
-  const list: Route[] = [];
-
-  list.push({
-    label: 'Новостройки',
-    url: '/novostroyki',
-  });
-
-  if (data.value?.complex?.name) {
-    list.push({
-      label: data.value?.complex.name,
-    });
-  }
-
-  return list;
-});
 
 const typeTitle = computed(() => {
     if (!data.value?.complex) return ''
@@ -62,6 +46,29 @@ const typeTitle = computed(() => {
         return `${type}-квартиры ЖК ${data.value.complex.name}`
     }
 })
+
+const routes = computed<Route[]>(() => {
+  const list: Route[] = [];
+
+  list.push({
+    label: 'Новостройки',
+    url: '/novostroyki',
+  });
+
+  if (data.value?.complex?.name) {
+    list.push({
+      label: data.value.complex.name,
+      url: `/novostroyki/${route.params.slug}`,
+    });
+  }
+
+  if (typeTitle.value)
+  list.push({
+    label: typeTitle.value,
+  });
+
+  return list;
+});
 
 const roomsArray = computed(() => {
     if (!data.value?.complex) return []

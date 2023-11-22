@@ -4,12 +4,12 @@
       <div class="credit-calc-group__title">
         {{ title }}
       </div>
-      <div class="credit-calc-group__value">
+      <div class="credit-calc-group__value" :class="disabled && 'credit-calc-group__value--static'">
         {{ value.toLocaleString() }} {{ postfix }} 
 
         <span v-if="additionalValue">{{ additionalValue }}</span>
       </div>
-      <ClientOnly>
+      <ClientOnly v-if="!disabled">
         <div class="credit-calc-group__range-wrap">
           <RangeSlider
             class="credit-calc-group__range-slider"
@@ -27,7 +27,7 @@
       </ClientOnly>
     </div>
 
-    <div class="credit-calc-group__labels">
+    <div class="credit-calc-group__labels" v-if="!disabled">
       <div class="credit-calc-group__label">
         {{ formatNumber(min) }} {{ postfix }} <span>{{ minLabelPostfix }}</span>
       </div>
@@ -50,6 +50,7 @@ interface Props {
   minLabelPostfix?: string;
   maxLabelPostfix?: string;
   additionalValue?: string;
+  disabled?: boolean
 }
 
 interface Emits {
@@ -109,6 +110,10 @@ watch(
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    &--static {
+      color: var(--accent);
+    }
   }
 
   &__range-slider {

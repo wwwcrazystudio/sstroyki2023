@@ -2,29 +2,19 @@
   <div class="rooms-card">
     <div class="rooms-card__wrap">
       <div class="rooms-card__col">
-        <Gallery class="rooms-card__gallery" :images="gallery" />
+        <Gallery has-fullscreen contain-first class="rooms-card__gallery" :images="gallery" />
 
-        <div class="rooms-card__thumbnails">
-          <div
-            class="rooms-card__thumbnails-item"
-            v-for="img in gallery.slice(0, 3)"
-            :data-left="gallery.length - 3"
-          >
-            <picture>
-              <source
-                v-if="img?.mobile"
-                :srcset="img.mobile"
-                media="(max-width: 768px)"
-              />
-              <img :src="img?.desktop" alt="" />
-            </picture>
-          </div>
-        </div>
+        <Thumbnails class="rooms-card__thumbnails" :gallery="gallery" />
       </div>
       <div class="rooms-card__col">
-        <Tags :tags="[]" class="rooms-card__tags" />
+        <Tags :tags="tags" class="rooms-card__tags" />
 
-        <div class="rooms-card__title">2-комн. квартира {{room.square}} м² {{room.floor_number}}/{{ room.floors }} эт.</div>
+        <NuxtLink :to="groupRoute" class="rooms-card__title">
+          {{ roomType }} {{ room.square }} м² {{ room.floor_number }}
+          /
+          {{ room.floors }}
+          эт.
+        </NuxtLink>
 
         <div class="rooms-card__complex">
           <div class="rooms-card__complex-icon">
@@ -190,6 +180,7 @@ import type {
   ComplexSingleRoom,
   DeveloperData,
   ResponsiveImage,
+  Tag,
 } from '~/types/interfaces';
 
 interface Props {
@@ -199,6 +190,7 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const route = useRoute()
 
 const gallery = computed(() => {
   const roomGallery = [
@@ -213,6 +205,57 @@ const gallery = computed(() => {
     : [];
 
   return roomGallery.concat(complexGallery);
+});
+
+const roomType = computed(() => {
+  switch (props.room.rooms) {
+    case '0':
+      return 'Студия';
+    case '1':
+      return '1-комн. квартира';
+    case '2':
+      return '2-комн. квартира';
+    case '3':
+      return '3-комн. квартира';
+    case '4':
+      return '4-комн. квартира';
+    default:
+      return '---';
+  }
+});
+
+const groupRoute = computed(() => {
+  const houseSlug = route.params.slug
+  switch (props.room.rooms) {
+    case '0':
+    return `/novostroyki/${houseSlug}/studii/${props.room.room_id}`
+    case '1':
+    return `/novostroyki/${houseSlug}/1k-kvartiry/${props.room.room_id}`
+    case '2':
+    return `/novostroyki/${houseSlug}/2k-kvartiry/${props.room.room_id}`
+    case '3':
+    return `/novostroyki/${houseSlug}/3k-kvartiry/${props.room.room_id}`
+    case '4':
+    return `/novostroyki/${houseSlug}/4k-kvartiry/${props.room.room_id}`
+  }
+})
+
+const tags = computed<Tag[]>(() => {
+  const list: Tag[] = [];
+
+  if (props.complex?.class) {
+    list.push({
+      label: `${props.complex.class} класс`,
+    });
+  }
+
+  if (props.complex?.status) {
+    list.push({
+      label: `${props.complex.status}`,
+    });
+  }
+
+  return list;
 });
 </script>
 
@@ -237,7 +280,7 @@ const gallery = computed(() => {
     @include media-breakpoint-down(md) {
       grid-template-columns: 1fr;
       padding: rem(16px);
-      gap: rem(16px)
+      gap: rem(16px);
     }
   }
 
@@ -252,6 +295,10 @@ const gallery = computed(() => {
     }
   }
 
+  &__thumbnails {
+    height: rem(80px);
+  }
+
   &__tags {
     margin-bottom: rem(16px);
   }
@@ -263,6 +310,7 @@ const gallery = computed(() => {
     display: flex;
     gap: rem(24px);
     align-items: center;
+    text-decoration: none;
 
     @include media-breakpoint-down(md) {
       margin-bottom: rem(16px);
@@ -279,54 +327,10 @@ const gallery = computed(() => {
     }
   }
 
-  &__thumbnails {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: rem(12px);
-    height: rem(80px);
-    margin-top: rem(12px);
-  }
-
   &__metro {
     display: flex;
     align-items: center;
-    gap: rem(8px)
-  }
-
-  &__thumbnails-item {
-    height: rem(80px);
-    border: 1px solid transparent;
-    border-radius: rem(10px);
-    overflow: hidden;
-    position: relative;
-
-    &:first-of-type {
-      border: 1px solid var(--accent);
-      padding: rem(8px);
-    }
-
-    &:last-of-type {
-      &::before {
-        content: '+' attr(data-left);
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(#000, 0.3);
-        font-size: rem(20px);
-        color: #fff;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    gap: rem(8px);
   }
 
   &__developer-info {
@@ -374,7 +378,7 @@ const gallery = computed(() => {
     font-size: rem(32px);
     margin-bottom: rem(8px);
     font-weight: 600;
-    
+
     @include media-breakpoint-down(md) {
       font-size: rem(24px);
       margin-bottom: rem(4px);
