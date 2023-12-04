@@ -28,7 +28,7 @@
           </li>
           <li class="apartment-card__meta-item">
             Тип жилья
-            <span>{{ complex.material }}</span>
+            <span>{{ complex.roomtype }}</span>
           </li>
         </ul>
         <div class="apartment-card__foot">
@@ -37,6 +37,7 @@
             class="apartment-card__phone-btn"
           />
           <NuxtLink
+            target="_blank"
             :to="`/novostroyki/${homeSlug}`"
             class="apartment-card__btn"
           >

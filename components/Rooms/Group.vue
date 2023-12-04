@@ -34,7 +34,7 @@
         <RoomsItem :room="room" v-for="room in rooms.array.slice(0, 5)" />
       </ul>
 
-      <NuxtLink :to="groupRoute" class="rooms-group__link" v-if="rooms.array.length > 5">
+      <NuxtLink :to="groupRoute" target="_blank" class="rooms-group__link" v-if="rooms.array.length > 5">
         Смотреть все предложения
 
         <svg
@@ -93,7 +93,7 @@ const roomType = computed(() => {
       case 3:
       return '3-комн.';
       case 4:
-      return '4-комн.';
+      return '4+-комн.';
       default:
       return '---';
   }

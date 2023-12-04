@@ -42,7 +42,8 @@
             title="Ставка"
             v-model:value="calcData.percent"
             :max="15"
-            :min="1"
+            :min="0.1"
+            :step="0.1"
             postfix="%"
           />
 
@@ -63,7 +64,7 @@
             <template v-for="(group, index) in complex.rooms">
               <FormRadioLabel
                 v-if="group.array.length"
-                :label="index > 0 ? index.toString() : 'Студия'"
+                :label="getRoomType(index)"
                 :value="index"
                 name="type"
                 :checked="roomType === index"
@@ -119,7 +120,7 @@ if (props.room) {
 const calcData = reactive({
   price: parseInt(props.complex.rooms[0].array[0].price) || 568000,
   firstPay: Math.round((parseInt(props.complex.rooms[0].array[0].price) || 568000) * 0.05),
-  years: 5,
+  years: 20,
   percent: 8,
 });
 
@@ -144,6 +145,23 @@ const total = computed(() => {
   }
 });
 
+const getRoomType = (index: number) => {
+  switch (index) {
+    case 0:
+      return 'Студия';
+    case 1:
+      return '1';
+    case 2:
+      return '2';
+    case 3:
+      return '3';
+    case 4:
+      return '4+';
+    default:
+      return '---';
+  }
+}
+
 watch(
   () => selectedRoom.value,
   () => {
@@ -152,6 +170,12 @@ watch(
     calcData.firstPay = Math.round(roomPrice * 0.05);
   }
 );
+
+watch(() => roomType.value, () => {
+  if (!props.complex.rooms) return
+  selectedRoom.value = props.complex.rooms[roomType.value].array[0]
+
+})
 </script>
 
 <style lang="scss" scoped>

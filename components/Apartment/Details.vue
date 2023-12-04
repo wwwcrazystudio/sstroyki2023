@@ -32,7 +32,7 @@
         <div class="apartment-spec__title">Характеристики</div>
 
         <ul class="apartment-spec__list">
-          <li class="apartment-spec__item" v-for="spec in specToShow" >
+          <li class="apartment-spec__item" v-for="spec in specs" >
             <div class="apartment-spec__item-icon">
               <img :src="getSpecIcon(spec.key)" alt="Класс жилья" />
             </div>
@@ -44,25 +44,6 @@
             </div>
           </li>
         </ul>
-
-        <button class="apartment-info__link" @click="showFullSpecs = !showFullSpecs">
-          {{ showFullSpecs ? 'Скрыть' : 'Показать' }}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="12"
-            height="12"
-            viewBox="0 0 12 12"
-            fill="none"
-            :transform="showFullSpecs ? 'rotate(180)' : 'rotate(0)'"
-          >
-            <path
-              d="M11 3.57874L6.07874 8.5L1.15748 3.57874"
-              stroke="#347DE7"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-          </svg>
-        </button>
       </div>
     </div>
   </div>
@@ -140,9 +121,6 @@ const descriptionHeight = computed(() => {
   }
 })
 
-const specToShow = computed(() => {
-  return showFullSpecs.value ? specs.value : specs.value.slice(0, 2)
-})
 
 const getSpecIcon = (key: string) => {
   switch (key) {

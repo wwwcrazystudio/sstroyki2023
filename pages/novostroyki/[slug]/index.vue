@@ -36,7 +36,7 @@
             title="Другие ЖК от застройщика"
             :houses="
               Object.values(data.developer.houses).filter(
-                (el) => el.developer_id
+                (el) => el.developer_id && el.house_id !== data?.complex.house_id
               )
             "
           />
@@ -45,7 +45,7 @@
 
           <ApartmentRelatedApartments
             title="ЖК в том же ценовом диапазоне"
-            :houses="data.complex.recommended"
+            :houses="data.complex.recommended.filter(el => el.house_id !== data?.complex.house_id)"
           />
         </div>
 

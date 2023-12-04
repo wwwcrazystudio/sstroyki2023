@@ -4,14 +4,18 @@
       <div class="container">
         <Breadcrumbs class="rooms-list__breadcrumbs" :routes="routes" />
 
-        <ApartmentCard :title="typeTitle" class="rooms-list__apartment-card" :complex="data?.complex" :developer="data?.developer" />
+        <ApartmentCard :title="typeTitle" class="rooms-list__apartment-card" :complex="data?.complex"
+          :developer="data?.developer" />
 
         <div class="rooms-list__list-wrap">
-            <div class="rooms-list__list-count">{{ roomsArray.length }}  {{ plural(roomsArray.length, 'объявление', 'объявлений', 'объявлений') }}</div>
+          <div class="rooms-list__list-count">{{ roomsArray.length }}
+            {{ plural(roomsArray.length, 'объявление', 'объявлений', 'объявлений') }}</div>
 
-            <ul class="rooms-list__list">
-                <RoomsCard v-for="room in roomsArray" :complex="data.complex" :developer="data.developer" :room="room" />
-            </ul>
+          <ul class="rooms-list__list">
+            <RoomsCard v-for="room in roomsArray.slice(page - 1, (8 * page) - 1)" :complex="data.complex" :developer="data.developer" :room="room" />
+          </ul>
+
+          <Pagination :per-page="8" v-model:active-page="page" :total-items="roomsArray.length"  class="rooms-list__pagination" />
         </div>
       </div>
     </div>
@@ -33,18 +37,33 @@ const { data } = await useFetch<PageData>(
   `/api/novostroyki/${route.params.slug}`
 );
 
+const page = ref<number>(1)
 
 const typeTitle = computed(() => {
-    if (!data.value?.complex) return ''
+  if (!data.value?.complex) return ''
 
-    if (route.params.type === 'studii') {
-        return `Студии ЖК ${data.value.complex.name}`
-    }
+  if (route.params.type === 'studii') {
+    return `Студии ЖК ${data.value.complex.name} (${data.value.developer.title})`
+  }
 
-    if (route.params.type.includes('kvartiry')) {
-        const type = (route.params.type as string).split('-')[0]
-        return `${type}-квартиры ЖК ${data.value.complex.name}`
+  if (route.params.type.includes('kvartiry')) {
+    let type = ''
+    switch (route.params.type) {
+      case '1k-kvartiry':
+        type = '1-комнатные'
+        break;
+      case '2k-kvartiry':
+        type = '2-комнатные'
+        break;
+      case '3k-kvartiry':
+        type = '3-комнатные'
+        break;
+      case '4k-kvartiry':
+        type = '4+-комнатные'
+        break;
     }
+    return `${type} квартиры ЖК ${data.value.complex.name} (${data.value.developer.title})`
+  }
 })
 
 const routes = computed<Route[]>(() => {
@@ -63,67 +82,71 @@ const routes = computed<Route[]>(() => {
   }
 
   if (typeTitle.value)
-  list.push({
-    label: typeTitle.value,
-  });
+    list.push({
+      label: typeTitle.value,
+    });
 
   return list;
 });
 
 const roomsArray = computed(() => {
-    if (!data.value?.complex) return []
+  if (!data.value?.complex) return []
 
-    if (route.params.type === 'studii') {
-        return data.value.complex.rooms[0].array
-    }
+  if (route.params.type === 'studii') {
+    return data.value.complex.rooms[0].array
+  }
 
-    if (route.params.type.includes('kvartiry')) {
-        const type = (route.params.type as string).split('k-')[0]
-        return (data.value.complex.rooms[type as keyof typeof data.value.complex.rooms] as ComplexRoomsData).array
-    }
+  if (route.params.type.includes('kvartiry')) {
+    const type = (route.params.type as string).split('k-')[0]
+    return (data.value.complex.rooms[type as keyof typeof data.value.complex.rooms] as ComplexRoomsData).array
+  }
 
-    return []
+  return []
 })
 
 </script>
 
 <style lang="scss" scoped>
 .rooms-list {
-    &__wrap {
-        padding: rem(40px 0);
+  &__wrap {
+    padding: rem(40px 0);
+  }
+
+  &__breadcrumbs {
+    margin-bottom: rem(48px);
+
+    @include media-breakpoint-down(md) {
+      margin-bottom: rem(24px);
     }
+  }
 
-    &__breadcrumbs {
-        margin-bottom: rem(48px);
+  &__list-wrap {
+    margin: rem(56px 0);
 
-        @include media-breakpoint-down(md) {
-            margin-bottom: rem(24px);
-        }
+    @include media-breakpoint-down(md) {
+      margin: rem(36px 0);
     }
+  }
 
-    &__list-wrap {
-        margin: rem(56px 0);
+  &__list-count {
+    font-weight: 600;
+    font-size: rem(24px);
+    margin-bottom: rem(24px);
 
-        @include media-breakpoint-down(md) {
-            margin: rem(36px 0);
-        }
+    @include media-breakpoint-down(md) {
+      margin-bottom: rem(16px);
     }
+  }
 
-    &__list-count {
-        font-weight: 600;
-        font-size: rem(24px);
-        margin-bottom: rem(24px);
+  &__list {
+    @include unlist();
 
-        @include media-breakpoint-down(md) {
-            margin-bottom: rem(16px);
-        }
-    }
+    display: grid;
+    gap: rem(32px);
+  }
 
-    &__list {
-        @include unlist();
-
-        display: grid;
-        gap: rem(32px);
-    }
+  &__pagination {
+    margin-top: rem(56px);
+  }
 }
 </style>

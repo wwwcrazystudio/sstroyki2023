@@ -40,7 +40,7 @@
           />
         </svg>
       </button>
-      <button class="gallery__control gallery__control--prev" ref="prevEl">
+      <button class="gallery__control gallery__control--prev" ref="prevEl"  v-if="swiper && swiper.slides.length > 1">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -62,7 +62,7 @@
           />
         </svg>
       </button>
-      <button class="gallery__control gallery__control--next" ref="nextEl">
+      <button class="gallery__control gallery__control--next" ref="nextEl"  v-if="swiper && swiper.slides.length > 1">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -84,7 +84,7 @@
           />
         </svg>
       </button>
-      <div class="gallery__counter">
+      <div class="gallery__counter" v-if="swiper && swiper.slides.length > 1">
         {{ activeSlide }} / {{ swiper?.slides.length }}
       </div>
     </div>

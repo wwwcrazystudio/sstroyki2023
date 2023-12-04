@@ -10,7 +10,7 @@
         <Tags :tags="tags" class="rooms-card__tags" />
 
         <NuxtLink :to="groupRoute" class="rooms-card__title">
-          {{ roomType }} {{ room.square }} м² {{ room.floor_number }}
+          {{ roomType }} {{ room.square }} м² {{ room.floor }}
           /
           {{ room.floors }}
           эт.
@@ -147,7 +147,7 @@
         <div class="rooms-card__per-square">
           {{
             Math.round(
-              parseInt(room.price) / parseInt(room.square)
+              parseInt(room.price) / parseFloat(room.square)
             ).toLocaleString()
           }}
           ₽ за м²
@@ -246,12 +246,6 @@ const tags = computed<Tag[]>(() => {
   if (props.complex?.class) {
     list.push({
       label: `${props.complex.class} класс`,
-    });
-  }
-
-  if (props.complex?.status) {
-    list.push({
-      label: `${props.complex.status}`,
     });
   }
 

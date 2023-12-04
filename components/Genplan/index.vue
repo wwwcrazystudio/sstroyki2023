@@ -11,10 +11,15 @@
           :class="item.label === activeItem?.label && 'genplan__item--active'"
           v-for="item in complex.scheme_list"
           :style="{ top: `${item.y}%`, left: `${item.x}%` }"
-          @click.stop="(e) => handleSetActiveItem(e, item)"
+          @mouseenter.stop="(e) => handleSetActiveItem(e, item)"
+          @click.stop
         ></div>
 
-        <div ref="popup" :style="floatingStyles">
+        <div
+          ref="popup"
+          :style="floatingStyles"
+          @mouseleave.stop="activeItem = undefined"
+        >
           <GenplanPopup
             class="genplan__genplan-popup"
             :item="activeItem"
@@ -36,7 +41,7 @@ interface Props {
 
 defineProps<Props>();
 
-const activeItem = ref<SchemeItem>();
+const activeItem = ref<SchemeItem | undefined>();
 
 const reference = ref<HTMLElement>();
 const popup = ref<HTMLElement>();

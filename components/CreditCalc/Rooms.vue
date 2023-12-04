@@ -1,13 +1,13 @@
 <template>
     <div class="credit-calc-rooms">
         <div class="credit-calc-rooms__wrap">
-            <div class="credit-calc-rooms__title">26 планировок</div>
+            <div class="credit-calc-rooms__title">{{ rooms.length }} {{ plural(rooms.length, 'планировка','планировка', 'планировок') }}</div>
 
             <ul class="credit-calc-rooms__list">
                 <li class="credit-calc-rooms__item" v-for="room in rooms">
                     <button class="credit-calc-rooms__item-button" :class="room.uuid === selectedRoomId && 'credit-calc-rooms__item-button--active'" @click="$emit('select', room)">
                         <span class="credit-calc-rooms__item-img">
-                            <img src="@/assets/img/placeholder/room.jpg" alt="">
+                            <img :src="room.plan_room" alt="">
                         </span>
                         <span class="credit-calc-rooms__item-info">
                             Площадь: <span>{{room.square}} м²</span>
@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 import type { ComplexSingleRoom } from '~/types/interfaces';
+import plural from 'plural-ru'
 
 interface Props {
     rooms: ComplexSingleRoom[]

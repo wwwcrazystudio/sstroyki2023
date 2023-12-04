@@ -6,7 +6,7 @@
         <div class="apartment-head__info">
           <div class="apartment-head__info-col">
             <Tags class="apartment-head__tags" :tags="tags" />
-            <h1 class="apartment-head__heading">{{ complex?.name }}</h1>
+            <h1 class="apartment-head__heading">ЖК {{ complex?.name }} ({{ developer.title }})</h1>
             <div class="apartment-head__address">{{ complex?.address }}</div>
             <div class="apartment-head__meta">
               <div

@@ -1,14 +1,14 @@
 <template>
   <div class="apartment-mini-info">
     <div class="apartment-mini-info__wrap">
-      <div class="apartment-mini-info__title">{{ complex.name }}</div>
+      <div class="apartment-mini-info__title">ЖК {{ complex.name }}</div>
       <div class="apartment-mini-info__address">
         {{ complex.address }}
       </div>
 
       <MetroDistance
         class="apartment-mini-info__metro-distance"
-        dark
+        color="dark"
         :metro="complex.metro_info[0]"
       />
 

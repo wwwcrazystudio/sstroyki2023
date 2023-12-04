@@ -9,12 +9,12 @@
         <div class="rooms-item__price">
           {{ parseInt(room.price).toLocaleString() }} ₽
 
-          <span class="rooms-item__per-square">{{ Math.round(parseInt(room.price) / parseInt(room.square)).toLocaleString() }} ₽ за м²</span>
+          <span class="rooms-item__per-square">{{ Math.round(parseInt(room.price) / parseFloat(room.square)).toLocaleString() }} ₽ за м²</span>
         </div>
 
         <div class="rooms-item__size">
-          Студия площадью: <span>{{room.square }} м2</span>
-          <span>{{room.floor_number}} / {{ room.floors }} этаж</span>
+          {{ roomType }} площадью: <span>{{room.square }} м2</span>
+          <span>{{room.floor}} / {{ room.floors }} этаж</span>
         </div>
 
         <div class="rooms-item__finished">
@@ -22,7 +22,7 @@
         </div>
       </div>
 
-      <NuxtLink :to="groupRoute" class="rooms-item__link"> Посмотреть квартиру </NuxtLink>
+      <NuxtLink :to="groupRoute" class="rooms-item__link" target="_blank"> Посмотреть квартиру </NuxtLink>
     </div>
   </li>
 </template>
@@ -44,6 +44,15 @@ const formattedDeadline = computed(() => {
   const { quarter, year } = date
   return `${quarter} квартал ${year} г.`
 })
+
+const roomType = computed(() => {
+  switch (props.room.rooms) {
+    case '0':
+      return 'Студия';
+    default:
+      return `${props.room.rooms}-комн. квартира`;
+  }
+});
 
 const groupRoute = computed(() => {
   const houseSlug = route.params.slug

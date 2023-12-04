@@ -15,13 +15,13 @@
       </div>
 
       <div class="room-preview__meta-item">
-        Кухня
-        <span>--- м²</span>
+        Потолок
+        <span>{{ room.height }} м²</span>
       </div>
 
       <div class="room-preview__meta-item">
         Этаж
-        <span>{{ room?.floor_number }} / {{ room?.floors }}</span>
+        <span>{{ room?.floor }} / {{ room?.floors }}</span>
       </div>
 
       <div class="room-preview__meta-item">
@@ -34,7 +34,6 @@
 
 <script lang="ts" setup>
 import Swiper from 'swiper';
-import { Navigation } from 'swiper/modules';
 
 import 'swiper/css';
 import 'swiper/css/navigation';

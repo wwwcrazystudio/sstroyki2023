@@ -15,7 +15,7 @@
             class="credit-calc-group__range-slider"
             v-model="value"
             :height="2"
-            :step="1"
+            :step="step || 1"
             :min="min"
             :max="max"
             trackColor="#DDD"
@@ -51,6 +51,7 @@ interface Props {
   maxLabelPostfix?: string;
   additionalValue?: string;
   disabled?: boolean
+  step?: number;
 }
 
 interface Emits {

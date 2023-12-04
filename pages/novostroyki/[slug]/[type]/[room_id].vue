@@ -36,6 +36,11 @@
                 )
               "
             />
+
+            <ApartmentRelatedApartments
+            title="ЖК в том же ценовом диапазоне"
+            :houses="data.complex.recommended.filter(el => el.house_id !== data?.complex.house_id)"
+          />
           </div>
 
           <div class="room-page__col">
@@ -72,6 +77,8 @@ const [{ data: room }, { data }] = await Promise.all([
   useFetch<ComplexSingleRoom>(`/api/room/${route.params.room_id}`),
   useFetch<PageData>(`/api/novostroyki/${route.params.slug}`),
 ]);
+
+console.log(route.params.room_id)
 
 const gallery = computed(() => {
   const roomGallery = [

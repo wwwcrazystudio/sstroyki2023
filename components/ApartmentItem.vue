@@ -1,24 +1,43 @@
 <template>
   <li class="apartment-item">
     <div class="apartment-item__wrap">
-      <Gallery v-if="gallery" :images="gallery" class="apartment-item__gallery" />
+      <Gallery
+        v-if="gallery"
+        :images="gallery"
+        class="apartment-item__gallery"
+      />
 
-      <div class="apartment-item__title">ЖК {{ complex.name }}</div>
+      <NuxtLink
+        target="_blank"
+        :to="`/novostroyki/${complex.house_url}`"
+        class="apartment-item__title">
+        ЖК {{ complex.name }}
+        </NuxtLink>
 
-      <div class="apartment-item__rooms">{{ totalRooms }} {{ plural(totalRooms, 'квартира', 'квартиры', 'квартир') }} от {{minPrice.toLocaleString()}} руб.</div>
+      <div class="apartment-item__rooms">
+        {{ totalRooms }}
+        {{ plural(totalRooms, 'квартира', 'квартиры', 'квартир') }} от
+        {{ minPrice.toLocaleString() }} руб.
+      </div>
 
       <div class="apartment-item__description">
         {{ complex.address }}
       </div>
+
+      <ul class="apartment-item__metro" v-if="complex.metro_info.length">
+        <li class="apartment-item__metro-item">
+          <MetroDistance color="inherit" :metro="complex.metro_info[0]" />
+        </li>
+      </ul>
     </div>
   </li>
 </template>
 
 <script setup lang="ts">
 import type { ComplexData } from '~/types/interfaces';
-import plural from 'plural-ru'
+import plural from 'plural-ru';
 
-import 'swiper/scss'
+import 'swiper/scss';
 
 interface Props {
   complex: ComplexData;
@@ -27,19 +46,23 @@ interface Props {
 const props = defineProps<Props>();
 
 const gallery = computed(() => {
-  if (!props.complex.image_main) return
-  return useResponsiveImage(props.complex.image_other).value
+  if (!props.complex.image_main) return;
+  return useResponsiveImage(props.complex.image_other).value;
 });
 
 const totalRooms = computed(() => {
-  return props.complex.rooms?.reduce((acc, room) => acc + parseInt(room.quantity), 0);
+  return props.complex.rooms?.reduce(
+    (acc, room) => acc + parseInt(room.quantity),
+    0
+  );
 });
 
 const minPrice = computed(() => {
-  const priceArray = props.complex.rooms?.filter(el => Boolean(el.price_min)).map((roomType) => parseInt(roomType.price_min));
-  return priceArray ? Math.min(...priceArray) : 0
-})
-
+  const priceArray = props.complex.rooms
+    ?.filter((el) => Boolean(el.price_min))
+    .map((roomType) => parseInt(roomType.price_min));
+  return priceArray ? Math.min(...priceArray) : 0;
+});
 </script>
 
 <style lang="scss" scoped>
@@ -56,6 +79,8 @@ const minPrice = computed(() => {
     font-size: rem(20px);
     font-weight: 600;
     margin-bottom: rem(12px);
+    text-decoration: none;
+    display: block;
   }
 
   &__rooms {
@@ -86,6 +111,10 @@ const minPrice = computed(() => {
     @include media-breakpoint-down(md) {
       font-size: rem(14px);
     }
+  }
+
+  &__metro {
+    @include unlist();
   }
 }
 </style>
