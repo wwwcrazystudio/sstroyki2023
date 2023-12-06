@@ -12,7 +12,7 @@
             {{ plural(roomsArray.length, 'объявление', 'объявлений', 'объявлений') }}</div>
 
           <ul class="rooms-list__list">
-            <RoomsCard v-for="room in roomsArray.slice(page - 1, (8 * page) - 1)" :complex="data.complex" :developer="data.developer" :room="room" />
+            <RoomsCard v-for="room in roomsToShow" :complex="data.complex" :developer="data.developer" :room="room" />
           </ul>
 
           <Pagination :per-page="8" v-model:active-page="page" :total-items="roomsArray.length"  class="rooms-list__pagination" />
@@ -102,6 +102,16 @@ const roomsArray = computed(() => {
   }
 
   return []
+})
+
+const roomsToShow = computed(() => {
+  return roomsArray.value.slice(8 * (page.value - 1), (8 * page.value) - 1)
+})
+
+watch(() => page.value, () => {
+  window.scrollTo({
+    top: 0
+  })
 })
 
 </script>

@@ -16,7 +16,7 @@
             :min="parseInt(complex.rooms[roomType].price_min)"
             :max="parseInt(complex.rooms[roomType].price_max)"
             postfix="₽"
-            :disabled="Boolean(room)"
+            disabled
           />
           <CreditCalcGroup
             title="Первоначальный взнос"
@@ -54,7 +54,8 @@
             </div>
             <div class="credit-calc__notice">
               Расчет условий не является публичной офертой. <br />
-              Финальные условия кредитования определяются при заключении договора.
+              Финальные условия кредитования определяются при заключении
+              договора.
             </div>
           </template>
         </div>
@@ -73,13 +74,20 @@
             </template>
           </div>
 
-          <CreditCalcRoomPreview v-if="selectedRoom" :room="selectedRoom" />
+          <CreditCalcRoomPreview
+            @prev="handlePrev"
+            @next="handleNext"
+            v-if="selectedRoom"
+            :room="selectedRoom"
+            :current="selectedRoomIndex"
+            :total="complex.rooms[roomType].array.length"
+          />
 
           <CreditCalcRooms
             v-if="!room"
             :rooms="complex.rooms[roomType].array"
-            :selectedRoomId="selectedRoom?.uuid"
-            @select="selectedRoom = $event"
+            :selectedRoomIndex="selectedRoomIndex"
+            @select="selectedRoomIndex = $event"
           />
 
           <template v-if="room">
@@ -89,7 +97,8 @@
             </div>
             <div class="credit-calc__notice">
               Расчет условий не является публичной офертой. <br />
-              Финальные условия кредитования определяются при заключении договора.
+              Финальные условия кредитования определяются при заключении
+              договора.
             </div>
           </template>
         </div>
@@ -103,23 +112,19 @@ import type { ComplexData, ComplexSingleRoom } from '~/types/interfaces';
 
 interface Props {
   complex: ComplexData;
-  room?: ComplexSingleRoom
+  room?: ComplexSingleRoom;
 }
 
 const props = defineProps<Props>();
 
 const roomType = ref<number>(0);
-const selectedRoom = ref<ComplexSingleRoom | undefined>(
-  props.complex?.rooms ? props.complex.rooms[0].array[0] : undefined
-);
-
-if (props.room) {
-  selectedRoom.value = props.room
-}
+const selectedRoomIndex = ref<number>(0);
 
 const calcData = reactive({
   price: parseInt(props.complex.rooms[0].array[0].price) || 568000,
-  firstPay: Math.round((parseInt(props.complex.rooms[0].array[0].price) || 568000) * 0.05),
+  firstPay: Math.round(
+    (parseInt(props.complex.rooms[0].array[0].price) || 568000) * 0.2
+  ),
   years: 20,
   percent: 8,
 });
@@ -160,22 +165,48 @@ const getRoomType = (index: number) => {
     default:
       return '---';
   }
+};
+
+const selectedRoom = computed(() => {
+  console.log(props.complex.rooms[roomType.value].array[selectedRoomIndex.value])
+  return props.room || props.complex.rooms[roomType.value].array[selectedRoomIndex.value]
+})
+
+
+const handlePrev = () => {
+  const length = props.complex.rooms[roomType.value].array.length
+
+  if (selectedRoomIndex.value === 0) {
+    selectedRoomIndex.value = length - 1
+    return
+  }
+
+  selectedRoomIndex.value -= 1
 }
+
+const handleNext = () => {
+  const length = props.complex.rooms[roomType.value].array.length
+
+  if (selectedRoomIndex.value === length - 1) {
+    selectedRoomIndex.value = 0
+    return
+  }
+
+  selectedRoomIndex.value += 1
+}
+
+watch(() => roomType.value, () => {
+  selectedRoomIndex.value = 0
+})
 
 watch(
   () => selectedRoom.value,
   () => {
     const roomPrice = parseInt(selectedRoom.value?.price || '');
     calcData.price = roomPrice;
-    calcData.firstPay = Math.round(roomPrice * 0.05);
+    calcData.firstPay = Math.round(roomPrice * 0.2);
   }
 );
-
-watch(() => roomType.value, () => {
-  if (!props.complex.rooms) return
-  selectedRoom.value = props.complex.rooms[roomType.value].array[0]
-
-})
 </script>
 
 <style lang="scss" scoped>

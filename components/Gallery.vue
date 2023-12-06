@@ -40,7 +40,7 @@
           />
         </svg>
       </button>
-      <button class="gallery__control gallery__control--prev" ref="prevEl"  v-if="swiper && swiper.slides.length > 1">
+      <button class="gallery__control gallery__control--prev" ref="prevEl"  v-show="!swiper?.isLocked">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -62,7 +62,7 @@
           />
         </svg>
       </button>
-      <button class="gallery__control gallery__control--next" ref="nextEl"  v-if="swiper && swiper.slides.length > 1">
+      <button class="gallery__control gallery__control--next" ref="nextEl"  v-show="!swiper?.isLocked">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -84,7 +84,7 @@
           />
         </svg>
       </button>
-      <div class="gallery__counter" v-if="swiper && swiper.slides.length > 1">
+      <div class="gallery__counter" v-if="!swiper?.isLocked">
         {{ activeSlide }} / {{ swiper?.slides.length }}
       </div>
     </div>
@@ -133,6 +133,8 @@ const toggleFullscreen = () => {
 
 onMounted(() => {
   if (!galleryEl.value) return;
+
+  console.log(prevEl.value)
 
   swiper.value = new Swiper(galleryEl.value, {
     modules: [Navigation],

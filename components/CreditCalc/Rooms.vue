@@ -4,8 +4,8 @@
             <div class="credit-calc-rooms__title">{{ rooms.length }} {{ plural(rooms.length, 'планировка','планировка', 'планировок') }}</div>
 
             <ul class="credit-calc-rooms__list">
-                <li class="credit-calc-rooms__item" v-for="room in rooms">
-                    <button class="credit-calc-rooms__item-button" :class="room.uuid === selectedRoomId && 'credit-calc-rooms__item-button--active'" @click="$emit('select', room)">
+                <li class="credit-calc-rooms__item" v-for="room, index in rooms">
+                    <button class="credit-calc-rooms__item-button" :class="index === selectedRoomIndex && 'credit-calc-rooms__item-button--active'" @click="$emit('select', index)">
                         <span class="credit-calc-rooms__item-img">
                             <img :src="room.plan_room" alt="">
                         </span>
@@ -25,11 +25,11 @@ import plural from 'plural-ru'
 
 interface Props {
     rooms: ComplexSingleRoom[]
-    selectedRoomId?: string
+    selectedRoomIndex?: number
 }
 
 interface Emits {
-    (e: 'select', value: ComplexSingleRoom): void
+    (e: 'select', value: number): void
 }
 
 defineProps<Props>()

@@ -38,6 +38,11 @@ const showPhone = ref<boolean>(false);
 
     color: var(--dark);
     width: 100%;
+    font-weight: 600;
+
+    &:hover {
+      box-shadow: none;
+    }
   }
 }
 </style>

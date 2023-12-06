@@ -1,9 +1,19 @@
 <template>
   <li class="rooms-group">
-    <button class="rooms-group__toggler" :class="expanded && 'rooms-group__toggler--expanded'" @click="expanded = !expanded">
+    <button
+      class="rooms-group__toggler"
+      ref="btn"
+      :class="expanded && 'rooms-group__toggler--expanded'"
+      @click="handleToggle"
+    >
       <span>
-        <span class="rooms-group__name"> {{ roomType }} от {{rooms.square_min}} м2 </span>
-        <span class="rooms-group__price-range"> от {{ formatNumber(parseInt(rooms.price_min)) }} до {{ formatNumber(parseInt(rooms.price_max)) }} ₽ </span>
+        <span class="rooms-group__name">
+          {{ roomType }} от {{ rooms.square_min }} м2
+        </span>
+        <span class="rooms-group__price-range">
+          от {{ formatNumber(parseInt(rooms.price_min)) }} до
+          {{ formatNumber(parseInt(rooms.price_max)) }} ₽
+        </span>
       </span>
 
       <span class="rooms-group__count"> {{ rooms.quantity }} предложений </span>
@@ -34,7 +44,12 @@
         <RoomsItem :room="room" v-for="room in rooms.array.slice(0, 5)" />
       </ul>
 
-      <NuxtLink :to="groupRoute" target="_blank" class="rooms-group__link" v-if="rooms.array.length > 5">
+      <NuxtLink
+        :to="groupRoute"
+        target="_blank"
+        class="rooms-group__link"
+        v-if="rooms.array.length > 5"
+      >
         Смотреть все предложения
 
         <svg
@@ -62,12 +77,19 @@ import type { ComplexRoomsData } from '~/types/interfaces';
 interface Props {
   type: number;
   rooms: ComplexRoomsData;
+  isExpanding: boolean;
+}
+
+interface Emits {
+  (e: 'expand'): void;
 }
 
 const props = defineProps<Props>();
+const emit = defineEmits<Emits>();
 
 const expanded = ref<boolean>(false);
-const route = useRoute()
+const btn = ref<HTMLElement>();
+const route = useRoute();
 
 const formatNumber = (number: number) => {
   if (number >= 1000 && number <= 1000000) {
@@ -81,39 +103,61 @@ const formatNumber = (number: number) => {
   return number;
 };
 
-
 const roomType = computed(() => {
   switch (props.type) {
     case 0:
       return 'Студия';
-      case 1:
+    case 1:
       return '1-комн.';
-      case 2:
+    case 2:
       return '2-комн.';
-      case 3:
+    case 3:
       return '3-комн.';
-      case 4:
+    case 4:
       return '4+-комн.';
-      default:
+    default:
       return '---';
   }
-})
+});
 
 const groupRoute = computed(() => {
-  const houseSlug = route.params.slug
+  const houseSlug = route.params.slug;
   switch (props.type) {
     case 0:
-    return `/novostroyki/${houseSlug}/studii`
+      return `/novostroyki/${houseSlug}/studii`;
     case 1:
-    return `/novostroyki/${houseSlug}/1k-kvartiry`
+      return `/novostroyki/${houseSlug}/1k-kvartiry`;
     case 2:
-    return `/novostroyki/${houseSlug}/2k-kvartiry`
+      return `/novostroyki/${houseSlug}/2k-kvartiry`;
     case 3:
-    return `/novostroyki/${houseSlug}/3k-kvartiry`
+      return `/novostroyki/${houseSlug}/3k-kvartiry`;
     case 4:
-    return `/novostroyki/${houseSlug}/4k-kvartiry`
+      return `/novostroyki/${houseSlug}/4k-kvartiry`;
   }
-})
+});
+
+const handleToggle = async () => {
+  emit('expand');
+
+  await nextTick()
+
+  if (!expanded.value) {
+    window.scrollTo({
+      top: btn.value?.offsetTop,
+    });
+  }
+
+  expanded.value = !expanded.value;
+};
+
+watch(
+  () => props.isExpanding,
+  () => {
+    if (props.isExpanding) {
+      expanded.value = false;
+    }
+  }
+);
 </script>
 
 <style lang="scss" scoped>
@@ -131,18 +175,17 @@ const groupRoute = computed(() => {
     width: 100%;
     transition: 500ms;
 
-    
     @include media-breakpoint-down(md) {
-       padding: rem(16px);
-       gap: rem(16px);
-      }
+      padding: rem(16px);
+      gap: rem(16px);
+    }
 
     &--expanded {
       box-shadow: 0px 3px 6px 0px rgba(7, 48, 116, 0.04),
-      0px 10px 10px 0px rgba(7, 48, 116, 0.03),
-      0px 23px 14px 0px rgba(7, 48, 116, 0.02),
-      0px 40px 16px 0px rgba(7, 48, 116, 0.01),
-      0px 63px 18px 0px rgba(7, 48, 116, 0);
+        0px 10px 10px 0px rgba(7, 48, 116, 0.03),
+        0px 23px 14px 0px rgba(7, 48, 116, 0.02),
+        0px 40px 16px 0px rgba(7, 48, 116, 0.01),
+        0px 63px 18px 0px rgba(7, 48, 116, 0);
       transition: 500ms;
     }
   }
@@ -178,12 +221,11 @@ const groupRoute = computed(() => {
   }
 
   &__toggler-icon {
-
     svg {
       @include media-breakpoint-down(md) {
-      width: rem(16px);
-      height: rem(16px);
-    }
+        width: rem(16px);
+        height: rem(16px);
+      }
     }
 
     &--expanded {

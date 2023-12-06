@@ -103,7 +103,7 @@ console.log(data.value);
   &__content {
     display: grid;
     grid-template-columns: auto rem(374px);
-    gap: rem(56px);
+    gap: rem(24px);
     margin: rem(56px 0);
 
     @include media-breakpoint-down(xxl) {

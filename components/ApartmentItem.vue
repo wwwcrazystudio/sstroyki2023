@@ -51,18 +51,35 @@ const gallery = computed(() => {
 });
 
 const totalRooms = computed(() => {
-  return props.complex.rooms?.reduce(
+  let rooms = props.complex.rooms
+
+  if (!rooms) return 0
+
+  if (!Array.isArray(rooms)) {
+    rooms = Object.values(rooms)
+  }
+
+  return rooms?.reduce(
     (acc, room) => acc + parseInt(room.quantity),
     0
   );
 });
 
 const minPrice = computed(() => {
-  const priceArray = props.complex.rooms
+  let rooms = props.complex.rooms
+
+  if (!rooms) return []
+
+  if (!Array.isArray(rooms)) {
+    rooms = Object.values(rooms)
+  }
+
+  const priceArray = rooms
     ?.filter((el) => Boolean(el.price_min))
     .map((roomType) => parseInt(roomType.price_min));
   return priceArray ? Math.min(...priceArray) : 0;
 });
+
 </script>
 
 <style lang="scss" scoped>

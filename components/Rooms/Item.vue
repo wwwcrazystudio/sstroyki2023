@@ -58,15 +58,15 @@ const groupRoute = computed(() => {
   const houseSlug = route.params.slug
   switch (props.room.rooms) {
     case '0':
-    return `/novostroyki/${houseSlug}/studii/${props.room.room_id}`
+    return `/novostroyki/${houseSlug}/studii/${props.room.uuid}`
     case '1':
-    return `/novostroyki/${houseSlug}/1k-kvartiry/${props.room.room_id}`
+    return `/novostroyki/${houseSlug}/1k-kvartiry/${props.room.uuid}`
     case '2':
-    return `/novostroyki/${houseSlug}/2k-kvartiry/${props.room.room_id}`
+    return `/novostroyki/${houseSlug}/2k-kvartiry/${props.room.uuid}`
     case '3':
-    return `/novostroyki/${houseSlug}/3k-kvartiry/${props.room.room_id}`
+    return `/novostroyki/${houseSlug}/3k-kvartiry/${props.room.uuid}`
     case '4':
-    return `/novostroyki/${houseSlug}/4k-kvartiry/${props.room.room_id}`
+    return `/novostroyki/${houseSlug}/4k-kvartiry/${props.room.uuid}`
   }
 })
 </script>

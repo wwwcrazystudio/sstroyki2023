@@ -11,7 +11,7 @@
 
       <ul class="apartment-rooms__list">
         <template v-for="group, index in rooms">
-          <RoomsGroup :type="index" :rooms="group" v-if="group.array.length" />
+          <RoomsGroup :is-expanding="isExpanding" @expand="isExpanding = true" :type="index" :rooms="group" v-if="group.array.length" />
         </template>
       </ul>
     </div>
@@ -30,6 +30,8 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const isExpanding = ref<boolean>(false)
+
 const totalRooms = computed(() => {
   return props.rooms?.reduce((acc, room) => acc + parseInt(room.quantity), 0);
 });
@@ -37,6 +39,14 @@ const totalRooms = computed(() => {
 const formattedDate = computed(() => {
   return DateTime.fromSQL(props.dateUpdated).toFormat('dd.MM.yyyy');
 });
+
+watch(() => isExpanding.value, () => {
+  if (isExpanding.value) {
+    setTimeout(() => {
+      isExpanding.value = false
+    }, 100)
+  }
+})
 </script>
 
 <style lang="scss" scoped>

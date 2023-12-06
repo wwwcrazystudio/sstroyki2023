@@ -129,22 +129,7 @@ watch(
       top: rem(-8px);
       background-color: #fff;
       border: 2px solid var(--accent);
-      filter: drop-shadow(
-          0px 8.68504810333252px 17.307403564453125px rgba(0, 0, 0, 0.11)
-        )
-        drop-shadow(
-          0px 13.971650123596191px 43.19026184082031px rgba(0, 0, 0, 0.15)
-        )
-        drop-shadow(
-          0px 14.70102310180664px 77.33646392822266px rgba(0, 0, 0, 0.17)
-        )
-        drop-shadow(
-          0px 8.837370872497559px 118.00712585449219px rgba(0, 0, 0, 0.19)
-        )
-        drop-shadow(
-          0px -7.841932773590088px 161.13706970214844px rgba(0, 0, 0, 0.22)
-        )
-        drop-shadow(0px -46px 200px rgba(0, 0, 0, 0.29));
+      transform: translateX(-10px) !important;
     }
 
     &:deep(.track, .track-filled) {

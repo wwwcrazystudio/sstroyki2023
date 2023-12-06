@@ -17,6 +17,8 @@
 
             <CreditCalc :room="room" :complex="data.complex" />
 
+            <PriceChart />
+
             <ApartmentDetails :complex="data.complex" />
 
             <ApartmentLocation :complex="data.complex" />
@@ -78,7 +80,7 @@ const [{ data: room }, { data }] = await Promise.all([
   useFetch<PageData>(`/api/novostroyki/${route.params.slug}`),
 ]);
 
-console.log(route.params.room_id)
+console.log(room.value)
 
 const gallery = computed(() => {
   const roomGallery = [
@@ -103,8 +105,8 @@ const typeTitle = computed(() => {
   }
 
   if (route.params.type.includes('kvartiry')) {
-    const type = (route.params.type as string).split('-')[0];
-    return `${type}-квартиры ЖК ${data.value.complex.name}`;
+    const type = (route.params.type as string).split('k-')[0];
+    return `${type}-комнатные квартиры ЖК ${data.value.complex.name}`;
   }
 });
 

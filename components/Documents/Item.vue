@@ -76,6 +76,7 @@ const name = computed(() => {
   &__wrap {
     padding: rem(16px 24px);
     display: grid;
+    align-items: center;
     gap: rem(8px);
     grid-template-columns: rem(60px) auto rem(40px);
     border-bottom: 1px solid #ddd;
