@@ -9,7 +9,7 @@
       <div class="rooms-card__col">
         <Tags :tags="tags" class="rooms-card__tags" />
 
-        <NuxtLink :to="groupRoute" class="rooms-card__title">
+        <NuxtLink :to="groupRoute" target="_blank" class="rooms-card__title">
           {{ roomType }} {{ room.square }} м² {{ room.floor }}
           /
           {{ room.floors }}
@@ -50,7 +50,7 @@
           </div>
           <div class="rooms-card__complex-name">{{ complex.name }}</div>
           <div class="rooms-card__complex-info">
-            Новостройка, {{ complex.status }}
+            Новостройка, {{ room.deadline }}
           </div>
         </div>
 
@@ -58,29 +58,31 @@
 
         <div class="rooms-card__metro">
           <div class="rooms-card__metro-item" v-for="metro in complex.metro_info">
-            <MetroDistance :metro="metro" />
+            <MetroDistance color="dark" :metro="metro" />
           </div>
         </div>
 
-        <DeveloperInfo :developer="developer" show-phone-btn class="rooms-card__developer-info" />
+        <DeveloperInfo :developer="developer" :complex="complex" show-phone-btn class="rooms-card__developer-info" />
       </div>
 
       <div class="rooms-card__col rooms-card__col--right">
-        <div class="rooms-card__price">
-          {{ parseInt(room.price).toLocaleString() }} ₽
+        <div>
+          <div class="rooms-card__price">
+            {{ parseInt(room.price).toLocaleString() }} ₽
+          </div>
+
+          <div class="rooms-card__per-square">
+            {{
+              Math.round(
+                parseInt(room.price) / parseFloat(room.square)
+              ).toLocaleString()
+            }}
+            ₽ за м²
+          </div>
         </div>
 
-        <div class="rooms-card__per-square">
-          {{
-            Math.round(
-              parseInt(room.price) / parseFloat(room.square)
-            ).toLocaleString()
-          }}
-          ₽ за м²
-        </div>
 
-
-        <NuxtLink :to="groupRoute" class="rooms-card__btn">
+        <NuxtLink :to="groupRoute" target="_blank" class="rooms-card__btn">
           Посмотреть квартиру
         </NuxtLink>
       </div>
@@ -123,8 +125,8 @@ const gallery = computed(() => {
     },
   ] as ResponsiveImage[];
 
-  const complexGallery = props.complex.image_other
-    ? useResponsiveImage(props.complex.image_other).value
+  const complexGallery = props.complex.image_room_list
+    ? useResponsiveImage(props.complex.image_room_list).value
     : [];
 
   return roomGallery.concat(complexGallery);
@@ -144,14 +146,8 @@ const groupRoute = computed(() => {
   switch (props.room.rooms) {
     case '0':
       return `/novostroyki/${houseSlug}/studii/${props.room.uuid}`
-    case '1':
-      return `/novostroyki/${houseSlug}/1k-kvartiry/${props.room.uuid}`
-    case '2':
-      return `/novostroyki/${houseSlug}/2k-kvartiry/${props.room.uuid}`
-    case '3':
-      return `/novostroyki/${houseSlug}/3k-kvartiry/${props.room.uuid}`
-    case '4':
-      return `/novostroyki/${houseSlug}/4k-kvartiry/${props.room.uuid}`
+    default:
+      return `/novostroyki/${houseSlug}/${parseInt(props.room.rooms) > 4 ? 4 : props.room.rooms}k-kvartiry/${props.room.uuid}`
   }
 })
 
@@ -201,6 +197,11 @@ const tags = computed<Tag[]>(() => {
 
     &--right {
       align-items: flex-end;
+
+      @include media-breakpoint-down(md) {
+        align-items: flex-start;
+        flex-direction: column-reverse;
+      }
     }
   }
 
@@ -238,6 +239,7 @@ const tags = computed<Tag[]>(() => {
 
   &__metro {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: rem(8px);
   }
@@ -313,6 +315,12 @@ const tags = computed<Tag[]>(() => {
     @extend %btn-light;
     
     margin-top: rem(24px);
+
+    @include media-breakpoint-down(md) {
+      margin-top: 0;
+      margin-bottom: rem(16px);
+      width: 100%;
+    }
   }
 }
 </style>

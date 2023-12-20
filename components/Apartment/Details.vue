@@ -112,7 +112,7 @@ const gallery = computed(() => {
 const descriptionHeight = computed(() => {
   let height = 'auto'
 
-  if (props.complex.description.length >= 500 && !showFullDesc.value) {
+  if (props.complex.description?.length >= 500 && !showFullDesc.value) {
     height = '150px'
   }
 

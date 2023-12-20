@@ -12,7 +12,7 @@
         :metro="complex.metro_info[0]"
       />
 
-      <DeveloperInfo :developer="developer" show-phone-btn />
+      <DeveloperInfo :developer="developer" :complex="complex" show-phone-btn />
     </div>
   </div>
 </template>

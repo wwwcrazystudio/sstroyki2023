@@ -7,12 +7,12 @@
       <Tags class="room-info__tags" :tags="tags" />
 
       <div class="room-info__price">
-        {{ parseInt(room.price).toLocaleString() }} ₽
+        {{ parseFloat(room.price).toLocaleString() }} ₽
 
         <div class="room-info__per-square">
           {{
             Math.round(
-              parseInt(room.price) / parseInt(room.square)
+              parseFloat(room.price) / parseFloat(room.square)
             ).toLocaleString()
           }}
           ₽ за м²
@@ -25,7 +25,7 @@
 
       <ul class="room-info__metro">
         <li class="room-info__metro-item" v-for="metro in complex.metro_info">
-          <MetroDistance :metro="metro" />
+          <MetroDistance :metro="metro" color="dark" />
         </li>
       </ul>
 
@@ -33,18 +33,19 @@
         class="room-info__developer-info"
         show-phone-btn
         :developer="developer"
+        :complex="complex"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import type { ComplexData, DeveloperData, Tag } from '~/types/interfaces';
+import type { ComplexData, ComplexSingleRoom, DeveloperData, Tag } from '~/types/interfaces';
 
 interface Props {
   complex: ComplexData;
   developer: DeveloperData;
-  room: any;
+  room: ComplexSingleRoom;
 }
 
 const props = defineProps<Props>();
@@ -60,7 +61,7 @@ const tags = computed<Tag[]>(() => {
 
   if (props.complex?.status) {
     list.push({
-      label: `${props.complex.status}`,
+      label: `${props.room.deadline}`,
     });
   }
 
@@ -70,17 +71,9 @@ const tags = computed<Tag[]>(() => {
 const roomType = computed(() => {
   switch (props.room.rooms) {
     case '0':
-      return 'студии';
-    case '1':
-      return '1-комн. квартиры';
-    case '2':
-      return '2-комн. квартиры';
-    case '3':
-      return '3-комн. квартиры';
-    case '4':
-      return '4-комн. квартиры';
+      return `студии`
     default:
-      return '---';
+      return `${props.room.rooms}-комн. квартиры`
   }
 });
 </script>

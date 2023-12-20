@@ -20,6 +20,11 @@ export interface ResponsiveImagesList {
   images?: string[]
 }
 
+export interface HistoryItem {
+  date: string
+  price: string
+}
+
 export interface ComplexSingleRoom {
   room_id: string
   uuid: string
@@ -52,6 +57,11 @@ export interface ComplexSingleRoom {
   date_update: string
   finish: string
   price: string
+  history: HistoryItem[]
+  meta_title: string
+  meta_h1: string
+  meta_description: string
+  meta_keywords: string
 }
 
 export interface ComplexRoomsData {
@@ -158,6 +168,12 @@ export interface ComplexData {
   scheme: string
   scheme_list: SchemeItem[]
   house_url: string
+  meta_title: string
+  meta_h1: string
+  meta_description: string
+  meta_keywords: string
+  image_room_page: ResponsiveImagesList
+  image_room_list: ResponsiveImagesList
 }
 
 export interface Route {

@@ -1,7 +1,7 @@
 <template>
-    <div class="credit-calc-rooms">
+    <div class="credit-calc-rooms" v-if="rooms?.length">
         <div class="credit-calc-rooms__wrap">
-            <div class="credit-calc-rooms__title">{{ rooms.length }} {{ plural(rooms.length, 'планировка','планировка', 'планировок') }}</div>
+            <div class="credit-calc-rooms__title">{{ rooms.length }} {{ plural(rooms.length, 'планировка','планировки', 'планировок') }}</div>
 
             <ul class="credit-calc-rooms__list">
                 <li class="credit-calc-rooms__item" v-for="room, index in rooms">

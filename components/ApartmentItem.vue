@@ -12,7 +12,7 @@
         :to="`/novostroyki/${complex.house_url}`"
         class="apartment-item__title">
         ЖК {{ complex.name }}
-        </NuxtLink>
+      </NuxtLink>
 
       <div class="apartment-item__rooms">
         {{ totalRooms }}

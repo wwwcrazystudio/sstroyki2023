@@ -78,6 +78,7 @@
             @prev="handlePrev"
             @next="handleNext"
             v-if="selectedRoom"
+            :hide-nav="room !== undefined"
             :room="selectedRoom"
             :current="selectedRoomIndex"
             :total="complex.rooms[roomType].array.length"
@@ -117,13 +118,17 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const roomType = ref<number>(0);
+const roomType = ref<number>(props.complex.rooms.findIndex(el => parseInt(el.quantity)));
 const selectedRoomIndex = ref<number>(0);
 
+const selectedRoom = computed(() => {
+  return props.room || props.complex.rooms[roomType.value].array[selectedRoomIndex.value]
+})
+
 const calcData = reactive({
-  price: parseInt(props.complex.rooms[0].array[0].price) || 568000,
+  price: parseInt(selectedRoom.value.price) || 568000,
   firstPay: Math.round(
-    (parseInt(props.complex.rooms[0].array[0].price) || 568000) * 0.2
+    (parseInt(selectedRoom.value.price) || 568000) * 0.2
   ),
   years: 20,
   percent: 8,
@@ -166,11 +171,6 @@ const getRoomType = (index: number) => {
       return '---';
   }
 };
-
-const selectedRoom = computed(() => {
-  console.log(props.complex.rooms[roomType.value].array[selectedRoomIndex.value])
-  return props.room || props.complex.rooms[roomType.value].array[selectedRoomIndex.value]
-})
 
 
 const handlePrev = () => {

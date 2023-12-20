@@ -32,8 +32,10 @@ defineProps<Props>();
     @include unlist();
 
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     width: fit-content;
+    gap: rem(10px 0)
   }
 
   &__item {

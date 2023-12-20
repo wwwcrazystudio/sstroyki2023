@@ -9,13 +9,13 @@
 
         <div class="rooms-list__list-wrap">
           <div class="rooms-list__list-count">{{ roomsArray.length }}
-            {{ plural(roomsArray.length, 'объявление', 'объявлений', 'объявлений') }}</div>
+            {{ plural(roomsArray.length, 'объявление', 'объявления', 'объявлений') }}</div>
 
           <ul class="rooms-list__list">
             <RoomsCard v-for="room in roomsToShow" :complex="data.complex" :developer="data.developer" :room="room" />
           </ul>
 
-          <Pagination :per-page="8" v-model:active-page="page" :total-items="roomsArray.length"  class="rooms-list__pagination" />
+          <Pagination v-if="roomsArray.length > 8" :per-page="8" v-model:active-page="page" :total-items="roomsArray.length"  class="rooms-list__pagination" />
         </div>
       </div>
     </div>
@@ -58,7 +58,7 @@ const typeTitle = computed(() => {
       case '3k-kvartiry':
         type = '3-комнатные'
         break;
-      case '4k-kvartiry':
+      default:
         type = '4+-комнатные'
         break;
     }
@@ -97,7 +97,11 @@ const roomsArray = computed(() => {
   }
 
   if (route.params.type.includes('kvartiry')) {
-    const type = (route.params.type as string).split('k-')[0]
+    let type = (route.params.type as string).split('k-')[0] as string | number
+
+    if (parseInt(type as string) > 4) {
+      type = 4
+    }
     return (data.value.complex.rooms[type as keyof typeof data.value.complex.rooms] as ComplexRoomsData).array
   }
 
@@ -105,7 +109,7 @@ const roomsArray = computed(() => {
 })
 
 const roomsToShow = computed(() => {
-  return roomsArray.value.slice(8 * (page.value - 1), (8 * page.value) - 1)
+  return roomsArray.value.slice(8 * (page.value - 1), (8 * page.value))
 })
 
 watch(() => page.value, () => {

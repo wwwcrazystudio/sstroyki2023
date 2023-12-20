@@ -1,5 +1,5 @@
 <template>
-    <div class="apartment-documents">
+    <div class="apartment-documents" v-if="documents">
         <div class="apartment-documents__wrap">
             <div class="apartment-documents__heading">
                 Документация

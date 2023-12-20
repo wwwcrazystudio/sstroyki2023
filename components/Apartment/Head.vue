@@ -79,6 +79,7 @@
             <DeveloperInfo
               class="apartment-head__developer-info"
               :developer="developer"
+              :complex="complex"
               show-phone-btn
             />
           </div>
@@ -136,7 +137,7 @@ const routes = computed<Route[]>(() => {
 
   if (props.complex?.name) {
     list.push({
-      label: props.complex!.name,
+      label: props.complex?.name,
     });
   }
 
@@ -165,7 +166,7 @@ const tags = computed<Tag[]>(() => {
 
 const toggleFullscreen = () => {
   fancybox.value = new Fancybox(
-    mainGallery.value.map((el) => {
+    mainGallery.value.filter(el => el).map((el) => {
       return {
         src: el.desktop,
         thumb: el.desktop,

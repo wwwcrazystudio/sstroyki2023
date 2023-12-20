@@ -106,6 +106,10 @@ const handleToggle = async () => {
     transition: 500ms;
     border-radius: rem(10px);
 
+    @include media-breakpoint-down(md) {
+        padding: rem(16px);
+      }
+
     &--expanded {
       box-shadow: 0px 3px 6px 0px rgba(7, 48, 116, 0.04),
       0px 10px 10px 0px rgba(7, 48, 116, 0.03),
@@ -121,6 +125,10 @@ const handleToggle = async () => {
       font-size: rem(24px);
       font-style: normal;
       font-weight: 600;
+
+      @include media-breakpoint-down(md) {
+        font-size: rem(16px);
+      }
 
       span {
         display: block;

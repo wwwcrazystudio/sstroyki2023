@@ -18,7 +18,7 @@
         </div>
 
         <div class="rooms-item__finished">
-          Срок сдачи: <span>{{formattedDeadline}} </span>
+          Срок сдачи: <span>{{room.deadline}} </span>
         </div>
       </div>
 
@@ -58,15 +58,9 @@ const groupRoute = computed(() => {
   const houseSlug = route.params.slug
   switch (props.room.rooms) {
     case '0':
-    return `/novostroyki/${houseSlug}/studii/${props.room.uuid}`
-    case '1':
-    return `/novostroyki/${houseSlug}/1k-kvartiry/${props.room.uuid}`
-    case '2':
-    return `/novostroyki/${houseSlug}/2k-kvartiry/${props.room.uuid}`
-    case '3':
-    return `/novostroyki/${houseSlug}/3k-kvartiry/${props.room.uuid}`
-    case '4':
-    return `/novostroyki/${houseSlug}/4k-kvartiry/${props.room.uuid}`
+      return `/novostroyki/${houseSlug}/studii/${props.room.uuid}`
+    default:
+      return `/novostroyki/${houseSlug}/${parseInt(props.room.rooms) > 4 ? 4 : props.room.rooms}k-kvartiry/${props.room.uuid}`
   }
 })
 </script>

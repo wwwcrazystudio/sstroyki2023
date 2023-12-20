@@ -44,12 +44,7 @@
         <RoomsItem :room="room" v-for="room in rooms.array.slice(0, 5)" />
       </ul>
 
-      <NuxtLink
-        :to="groupRoute"
-        target="_blank"
-        class="rooms-group__link"
-        v-if="rooms.array.length > 5"
-      >
+      <NuxtLink :to="groupRoute" target="_blank" class="rooms-group__link">
         Смотреть все предложения
 
         <svg
@@ -137,10 +132,13 @@ const groupRoute = computed(() => {
 });
 
 const handleToggle = async () => {
-  emit('expand');
+  if (!expanded.value) {
+    emit('expand');
+  }
 
-  await nextTick()
+  await nextTick();
 
+  // Scroll only if item is opening
   if (!expanded.value) {
     window.scrollTo({
       top: btn.value?.offsetTop,

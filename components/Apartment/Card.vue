@@ -2,9 +2,9 @@
   <div class="apartment-card">
     <div class="apartment-card__wrap">
       <div class="apartment-card__col">
-        <div class="apartment-card__heading">
+        <h1 class="apartment-card__heading">
           {{ title || complex.name }}
-        </div>
+        </h1>
         <div class="apartment-card__address">
           {{ complex.address }}
         </div>
@@ -13,7 +13,7 @@
             class="apartment-card__metro-item"
             v-for="metro in complex.metro_info"
           >
-            <MetroDistance :metro="metro" />
+            <MetroDistance :metro="metro" color="dark" />
           </li>
         </ul>
         <DeveloperInfo :developer="developer" />
@@ -33,7 +33,7 @@
         </ul>
         <div class="apartment-card__foot">
           <PhoneBtn
-            :phone="developer.phone"
+            :phone="complex.developer_phone || developer.phone"
             class="apartment-card__phone-btn"
           />
           <NuxtLink
@@ -71,7 +71,7 @@ const homeSlug = computed(() => {
 });
 
 const gallery = computed(() => {
-  return useResponsiveImage(props.complex.finish_images).value;
+  return useResponsiveImage(props.complex.image_room_page).value;
 });
 </script>
 

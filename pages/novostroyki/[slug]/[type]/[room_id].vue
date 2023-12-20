@@ -7,17 +7,27 @@
         <div class="room-page__content">
           <div class="room-page__col">
             <div>
-              <Gallery has-fullscreen :images="gallery" contain-first class="room-page__gallery" />
-              <Thumbnails
-                class="room-page__thumbnails"
-                :cols="6"
-                :gallery="gallery"
+              <Gallery
+                has-fullscreen
+                :images="gallery"
+                contain-first
+                class="room-page__gallery"
               />
+              <ClientOnly>
+                <Thumbnails
+                  class="room-page__thumbnails"
+                  :cols="thumbsCount"
+                  :gallery="gallery"
+                />
+            </ClientOnly>
             </div>
 
             <CreditCalc :room="room" :complex="data.complex" />
 
-            <PriceChart />
+            <PriceChart
+              :history="room.history"
+              class="room-page__price-chart"
+            />
 
             <ApartmentDetails :complex="data.complex" />
 
@@ -34,15 +44,20 @@
               title="Другие ЖК от застройщика"
               :houses="
                 Object.values(data.developer.houses).filter(
-                  (el) => el.developer_id
+                  (el) =>
+                    el.developer_id && el.house_id !== data?.complex.house_id
                 )
               "
             />
 
             <ApartmentRelatedApartments
-            title="ЖК в том же ценовом диапазоне"
-            :houses="data.complex.recommended.filter(el => el.house_id !== data?.complex.house_id)"
-          />
+              title="ЖК в том же ценовом диапазоне"
+              :houses="
+                data.complex.recommended.filter(
+                  (el) => el.house_id !== data?.complex.house_id
+                )
+              "
+            />
           </div>
 
           <div class="room-page__col">
@@ -80,8 +95,6 @@ const [{ data: room }, { data }] = await Promise.all([
   useFetch<PageData>(`/api/novostroyki/${route.params.slug}`),
 ]);
 
-console.log(room.value)
-
 const gallery = computed(() => {
   const roomGallery = [
     {
@@ -105,7 +118,11 @@ const typeTitle = computed(() => {
   }
 
   if (route.params.type.includes('kvartiry')) {
-    const type = (route.params.type as string).split('k-')[0];
+    let type = (route.params.type as string).split('k-')[0];
+
+    if (parseInt(type) >= 4) {
+      type = '4+';
+    }
     return `${type}-комнатные квартиры ЖК ${data.value.complex.name}`;
   }
 });
@@ -126,9 +143,10 @@ const routes = computed<Route[]>(() => {
   }
 
   if (typeTitle.value) {
+    let type = (route.params.type as string).split('k-')[0];
     list.push({
       label: typeTitle.value,
-      url: `/novostroyki/${route.params.slug}/${route.params.type}`,
+      url: `/novostroyki/${route.params.slug}/${parseInt(type) > 4 ? '4-kvartiry' : route.params.type}`,
     });
   }
 
@@ -140,6 +158,20 @@ const routes = computed<Route[]>(() => {
 
   return list;
 });
+
+const thumbsCount = computed(() => {
+  if (window.matchMedia('(max-width: 768px)').matches) {
+    return 3
+  }
+
+  return 6
+})
+
+useSeoMeta({
+  title: room.value?.meta_title || '',
+  description: room.value?.meta_description || '',
+  keywords: room.value?.meta_keywords || '',
+});
 </script>
 
 <style lang="scss" scoped>
@@ -150,16 +182,37 @@ const routes = computed<Route[]>(() => {
 
   &__breadcrumbs {
     margin-bottom: rem(48px);
+
+    @include media-breakpoint-down(md) {
+      margin-bottom: rem(16px);
+    }
   }
 
   &__content {
     display: grid;
     grid-template-columns: auto rem(374px);
     gap: rem(24px);
+
+    @include media-breakpoint-down(xxl) {
+      gap: rem(32px);
+    }
+
+    @include media-breakpoint-down(lg) {
+      display: flex;
+      flex-direction: column-reverse;
+      margin: rem(24px 0);
+      gap: rem(24px);
+    }
+
   }
 
   &__gallery {
     height: rem(450px);
+
+    
+    @include media-breakpoint-down(lg) {
+      height: rem(240px);
+    }
   }
 
   &__col {
@@ -175,6 +228,10 @@ const routes = computed<Route[]>(() => {
 
   &__thumbnails {
     height: rem(140px);
+
+    @include media-breakpoint-down(lg) {
+      height: rem(80px);
+    }
   }
 
   &__room-info {

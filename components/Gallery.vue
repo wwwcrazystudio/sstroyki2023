@@ -109,7 +109,6 @@ interface Props {
 const props = defineProps<Props>();
 
 const galleryEl = ref<HTMLElement>();
-const galleryNavEl = ref<HTMLElement>();
 const prevEl = ref<HTMLElement>();
 const nextEl = ref<HTMLElement>();
 const swiper = ref<Swiper>();
@@ -133,8 +132,6 @@ const toggleFullscreen = () => {
 
 onMounted(() => {
   if (!galleryEl.value) return;
-
-  console.log(prevEl.value)
 
   swiper.value = new Swiper(galleryEl.value, {
     modules: [Navigation],

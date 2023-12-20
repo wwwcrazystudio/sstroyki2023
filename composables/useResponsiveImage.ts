@@ -7,9 +7,9 @@ import type {
 export const useResponsiveImage = (imgs: ResponsiveImagesList) => {
     const list = ref<ResponsiveImage[]>([]);
 
-    if (imgs.desktop) {
-        list.value = imgs.desktop?.map((el) => {
-            const mobImage = imgs.mob?.find((mobEl) => el === mobEl);
+    if (imgs?.desktop) {
+        list.value = Object.values(imgs.desktop)?.filter(el => typeof el === 'string').map((el) => {
+            const mobImage = imgs.mob ? Object.values(imgs.mob)?.find((mobEl) => el === mobEl) : undefined;
             return {
                 desktop: `${imgs.path}/desktop/${el}`,
                 mobile: mobImage && `${imgs.path}/mob/${mobImage}`,
@@ -17,8 +17,8 @@ export const useResponsiveImage = (imgs: ResponsiveImagesList) => {
         });
     }
 
-    if (imgs.images) {
-        list.value = imgs.images?.map((el) => {
+    if (imgs?.images) {
+        list.value = Object.values(imgs.images)?.filter(el => typeof el === 'string').map((el) => {
             return {
                 desktop: `${imgs.path}/${el}`,
                 mobile: `${imgs.path}/${el}`,

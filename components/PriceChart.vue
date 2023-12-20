@@ -6,16 +6,18 @@
       <ul class="price-chart__range">
         <li class="price-chart__range-item">
           Мин:
-          <span>2 350 000 ₽</span>
+          <span>{{ Math.min(...historyPrices).toLocaleString() }} ₽</span>
         </li>
 
         <li class="price-chart__range-item">
           Макс:
-          <span>2 820 000 ₽</span>
+          <span>{{ Math.max(...historyPrices).toLocaleString() }} ₽</span>
         </li>
       </ul>
 
-      <Line class="price-chart__chart" :options="options" :data="data" />
+      <ClientOnly>
+        <Line class="price-chart__chart" :options="options" :data="data" />
+      </ClientOnly>
 
       <div class="price-chart__tooltip" ref="tooltipEl">123</div>
     </div>
@@ -36,6 +38,7 @@ import {
 } from 'chart.js';
 
 import type { ChartData, ChartOptions } from 'chart.js';
+import type { HistoryItem } from '~/types/interfaces';
 
 ChartJS.register(
   CategoryScale,
@@ -47,10 +50,22 @@ ChartJS.register(
   Filler
 );
 
+interface Props {
+  history: HistoryItem[];
+}
+
+const props = defineProps<Props>();
+
+const historyPrices = computed(() => {
+  const prices = props.history.map((el) => parseInt(el.price, 10));
+
+  return prices;
+});
+
 const tooltipEl = ref<HTMLElement>();
 
 const data = {
-  labels: ['Сентябрь 2023', 'Октябрь 2023', 'Ноябрь 2023', 'Декабрь 2023'],
+  labels: props.history.map((el) => el.date),
   datasets: [
     {
       fill: 'start',
@@ -81,7 +96,7 @@ const data = {
 
         return gradient;
       },
-      data: [2400000, 2600000, 2300000, 2700000],
+      data: historyPrices.value,
     },
   ],
 } as ChartData<'line'>;
@@ -104,6 +119,7 @@ const options = {
   scales: {
     x: {
       offset: false,
+      display: process.client ? window.matchMedia('(min-width: 768px)').matches : true,
       grid: {
         display: false,
       },
@@ -155,6 +171,7 @@ const options = {
         tooltipEl.value.style.opacity = '1';
         tooltipEl.value.style.left = positionX + tooltip.caretX - 35 + 'px';
         tooltipEl.value.style.top = positionY + tooltip.caretY - 60 + 'px';
+        tooltipEl.value.innerHTML = tooltip.dataPoints[0].formattedValue;
       },
     },
     legend: {
@@ -172,6 +189,10 @@ const options = {
     padding: rem(32px);
     border-radius: rem(20px);
     background: #fff;
+
+    @include media-breakpoint-down(md) {
+      padding: rem(16px);
+    }
   }
 
   &__heading {
@@ -209,6 +230,10 @@ const options = {
 
   &__chart {
     max-height: rem(325px);
+
+    @include media-breakpoint-down(md) {
+      max-height: rem(240px);
+    }
   }
 
   &__tooltip {

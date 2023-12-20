@@ -5,25 +5,25 @@
         <img :src="room.plan_room" alt="" />
       </div>
 
-      <button class="room-preview__control room-preview__control--prev" @click.prevent="$emit('prev')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M3.3346 12.25L21 12.25" stroke="#347DE7" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M6.15039 15L3.00037 12.0002L6.15039 9" stroke="#347DE7" stroke-linecap="round"
-            stroke-linejoin="round" />
-        </svg>
-      </button>
-
-      <button class="room-preview__control room-preview__control--next" @click.prevent="$emit('next')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M20.6654 12.25L3 12.25" stroke="#347DE7" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M17.8496 15L20.9996 12.0002L17.8496 9" stroke="#347DE7" stroke-linecap="round"
-            stroke-linejoin="round" />
-        </svg>
-      </button>
-
-      <div class="room-preview__counter" v-if="current !== undefined">
-        {{ current + 1 }} / {{ total }}
-      </div>
+      <transform v-if="!hideNav">
+        <button class="room-preview__control room-preview__control--prev" @click.prevent="$emit('prev')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M3.3346 12.25L21 12.25" stroke="#347DE7" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M6.15039 15L3.00037 12.0002L6.15039 9" stroke="#347DE7" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+        <button class="room-preview__control room-preview__control--next" @click.prevent="$emit('next')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M20.6654 12.25L3 12.25" stroke="#347DE7" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M17.8496 15L20.9996 12.0002L17.8496 9" stroke="#347DE7" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+        <div class="room-preview__counter" v-if="current !== undefined">
+          {{ current + 1 }} / {{ total }}
+        </div>
+      </transform>
     </div>
 
     <div class="room-preview__meta">
@@ -34,7 +34,7 @@
 
       <div class="room-preview__meta-item">
         Потолок
-        <span>{{ room.height }} м²</span>
+        <span>{{ room.height }} м</span>
       </div>
 
       <div class="room-preview__meta-item">
@@ -57,6 +57,7 @@ interface Props {
   room: ComplexSingleRoom;
   current?: number
   total?: number;
+  hideNav?: boolean;
 }
 
 interface Emits {
@@ -116,10 +117,10 @@ defineProps<Props>();
   &__meta-item {
     padding: rem(16px);
     border-radius: rem(5px);
-    font-size: rem(14px);
+    font-size: rem(13px);
     color: var(--gray);
     display: grid;
-    gap: rem(8px);
+    gap: rem(4px);
     background-color: #fff;
 
     @include media-breakpoint-down(md) {
@@ -134,7 +135,7 @@ defineProps<Props>();
       text-overflow: ellipsis;
 
       @include media-breakpoint-down(md) {
-        font-size: rem(14px);
+        font-size: rem(13px);
       }
     }
   }

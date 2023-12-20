@@ -19,15 +19,16 @@
       </div>
     </div>
 
-    <PhoneBtn v-if="showPhoneBtn" :phone="developer.phone" class="developer-info__phone-btn" />
+    <PhoneBtn v-if="showPhoneBtn" :phone="complex ? complex.developer_phone : developer.phone" class="developer-info__phone-btn" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import type { DeveloperData } from '~/types/interfaces';
+import type { ComplexData, DeveloperData } from '~/types/interfaces';
 
 interface Props {
   developer: DeveloperData;
+  complex?: ComplexData
   showPhoneBtn?: boolean;
 }
 

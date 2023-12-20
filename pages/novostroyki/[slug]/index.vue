@@ -1,5 +1,5 @@
 <template>
-  <div class="apartment-page" v-if="data?.complex && data?.developer">
+  <div class="apartment-page" v-if="data?.complex.name && data?.developer.title">
     <ApartmentHead :complex="data.complex" :developer="data.developer" />
 
     <div class="container">
@@ -17,7 +17,7 @@
             v-if="data.complex.rooms"
             :complex="data.complex"
             class="apartment-page__credit-calc"
-          />
+          /> 
 
           <ApartmentDetails
             :complex="data.complex"
@@ -26,13 +26,14 @@
 
           <ApartmentLocation :complex="data.complex" />
 
-          <ApartmentFacing :complex="data.complex" />
+          <ApartmentFacing :complex="data.complex" v-if="data.complex.finish_images" />
 
           <ApartmentDeveloper
             :complex="data.complex"
             :developer="data.developer"
           />
           <ApartmentRelatedApartments
+            v-if="data.developer.houses"
             title="Другие ЖК от застройщика"
             :houses="
               Object.values(data.developer.houses).filter(
@@ -44,6 +45,7 @@
           <ApartmentDocuments :documents="data.complex.documents" />
 
           <ApartmentRelatedApartments
+          v-if="data.complex.recommended"
             title="ЖК в том же ценовом диапазоне"
             :houses="data.complex.recommended.filter(el => el.house_id !== data?.complex.house_id)"
           />
@@ -65,8 +67,6 @@
 import type {
   ComplexData,
   DeveloperData,
-  Route,
-  Tag,
 } from '~/types/interfaces';
 
 interface PageData {
@@ -80,11 +80,17 @@ const { data } = await useFetch<PageData>(
   `/api/novostroyki/${route.params.slug}`
 );
 
-console.log(data.value);
+console.log(data.value?.complex)
 
-// if (!data.value?.complex) {
-//   navigateTo('/');
-// }
+useSeoMeta({
+  title: data.value?.complex.meta_title || '',
+  description: data.value?.complex.meta_description || '',
+  keywords: data.value?.complex.meta_keywords || ''
+})
+
+if (!data.value?.complex.name) {
+  navigateTo('/');
+}
 </script>
 
 <style lang="scss" scoped>

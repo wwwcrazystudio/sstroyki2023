@@ -1,5 +1,5 @@
 <template>
-  <div class="genplan">
+  <div class="genplan" v-if="complex.scheme">
     <div class="genplan__wrap">
       <div class="genplan__heading">Генплан проекта</div>
 

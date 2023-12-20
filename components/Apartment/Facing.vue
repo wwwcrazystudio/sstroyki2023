@@ -1,5 +1,5 @@
 <template>
-  <div class="apartment-facing">
+  <div class="apartment-facing" v-if="gallery.length">
     <div class="apartment-facing__wrap">
       <div class="apartment-facing__heading">Отделка квартир</div>
 
