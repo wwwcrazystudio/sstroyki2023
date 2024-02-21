@@ -4,7 +4,7 @@
       <div class="container">
         <Breadcrumbs class="rooms-list__breadcrumbs" :routes="routes" />
 
-        <ApartmentCard :title="typeTitle" class="rooms-list__apartment-card" :complex="data?.complex"
+        <ApartmentTitleCard :title="typeTitle" class="rooms-list__apartment-card" :complex="data?.complex"
           :developer="data?.developer" />
 
         <div class="rooms-list__list-wrap">
